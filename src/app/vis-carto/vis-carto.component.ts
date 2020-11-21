@@ -1,7 +1,7 @@
 import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { PassThrough } from 'stream';
+// import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vis-carto',
@@ -16,12 +16,13 @@ export class VisCartoComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
-    const container = this.nwEl.nativeElement;
+    this.network = new Network(
+      this.nwEl.nativeElement,
+      this.init_dataset(),
+      this.init_options()
+    );
 
-    const data = this.init_dataset();
-    const options = this.init_options();
-
-    this.draw(container, data, options);
+    this.init_events();
   }
 
   /**
@@ -124,13 +125,74 @@ export class VisCartoComponent implements AfterViewInit {
   }
 
   /**
-   * Draws the cartography.
-   * @param container vis-network emplacement
-   * @param data vis-network nodes and edges
-   * @param options vis-network options
+   * Export data as JSON
+   *
+   * @returns For each node : ID + label + connections to
    */
-  draw(container: any, data: object, options: object) {
-    this.network = new Network(container, data, options);
-    this.init_events();
+  export() {
+    const nodes = this.network.body.data.nodes;
+    var nodes_new = {};
+
+    nodes.getIds().forEach(function (id) {
+      var node = nodes.get(id);
+      nodes_new[id] = {};
+      nodes_new[id].label = node.label;
+      nodes_new[id].to = this.network.getConnectedNodes(id, "to");
+    });
+
+    return JSON.stringify(nodes_new, undefined, 2);
+  }
+
+  /**
+   * Import data from JSON
+   *
+   * @param raw_json Exported JSON network data
+   */
+  import(raw_json: string) {
+    const inputData = JSON.parse(raw_json);
+
+    var data = {
+      nodes: this.getNodeData(inputData),
+      edges: this.getEdgeData(inputData),
+    };
+
+    this.network.setData(data);
+  }
+
+  /**
+   * Retrieve nodes information from imported data
+   *
+   * @param data Imported data
+   * @returns Nodes dataset
+   */
+  getNodeData(data: object) {
+    var networkNodes = [];
+
+    for (const id in data) {
+      networkNodes.push({
+        id: id,
+        label: data[id].label
+      });
+    }
+
+    return new DataSet<any>(networkNodes);
+  }
+
+  /**
+   * Retrieve edges information from imported data
+   *
+   * @param data Imported data
+   * @returns Edges dataset
+   */
+  getEdgeData(data: object) {
+    var networkEdges = [];
+
+    for (const id in data) {
+      data[id].to.forEach(function (connId) {
+        networkEdges.push({ from: id, to: connId });
+      });
+    }
+
+    return new DataSet<any>(networkEdges);
   }
 }
