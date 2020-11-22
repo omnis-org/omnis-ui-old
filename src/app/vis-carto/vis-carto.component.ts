@@ -18,26 +18,26 @@ export class VisCartoComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.network = new Network(
       this.nwEl.nativeElement,
-      this.init_dataset(),
-      this.init_options()
+      this.initDataset(),
+      this.initOptions()
     );
 
-    this.init_events();
+    this.initEvents();
   }
 
   /**
    * TEMPORARY FUNCTION
    */
-  init_dataset() {
+  initDataset() {
     const nodes = new DataSet<any>([
-      { id: 1, label: "client", group: "client_linux", title: "MAC: aa:aa:aa:aa:aa:aa" },
-      { id: 2, label: "client", group: "client_linux" },
-      { id: 3, label: "client", group: "client_linux" },
-      { id: 4, label: "client" },
-      { id: 5, label: "router", group: "router" },
-      { id: 6, label: "client", group: "client_linux" },
-      { id: 7, label: "client", group: "client_linux" },
-      { id: 8, label: "router", group: "router" },
+      { id: 1, label: 'client', group: 'client', title: 'MAC: aa:aa:aa:aa:aa:aa' },
+      { id: 2, label: 'client', group: 'client' },
+      { id: 3, label: 'client', group: 'client' },
+      { id: 4, label: 'client' },
+      { id: 5, label: 'router', group: 'router' },
+      { id: 6, label: 'client', group: 'client' },
+      { id: 7, label: 'client', group: 'client' },
+      { id: 8, label: 'router', group: 'router' },
     ]);
 
     const edges = new DataSet<any>([
@@ -55,7 +55,7 @@ export class VisCartoComponent implements AfterViewInit {
   /**
    * Initialize vis-network options
    */
-  init_options() {
+  initOptions() {
     return {
       physics: false,
       locale: 'fr',
@@ -64,36 +64,36 @@ export class VisCartoComponent implements AfterViewInit {
         enabled: false,
       },
       nodes: {
-        shape: "dot",
+        shape: 'dot',
         size: 20,
-        color: "#5e5e5e",
+        color: '#5e5e5e',
       },
       edges: {},
       layout: {
         hierarchical: {
-          direction: "DU",
-          sortMethod: "directed",
+          direction: 'DU',
+          sortMethod: 'directed',
         },
       },
       groups: {
-        client_linux: {
-          shape: "icon",
+        client: {
+          shape: 'icon',
           icon: {
-            face: "'Font Awesome 5 Free'",
-            weight: "900",
-            code: "\uf109",
+            face: '\'Font Awesome 5 Free\'',
+            weight: '900',
+            code: '\uf109',
             size: 50,
-            color: "#5e5e5e",
+            color: '#5e5e5e',
           }
         },
         router: {
-          shape: "icon",
+          shape: 'icon',
           icon: {
-            face: "'Font Awesome 5 Free'",
-            weight: "900",
-            code: "\uf233",
+            face: '\'Font Awesome 5 Free\'',
+            weight: '900',
+            code: '\uf233',
             size: 50,
-            color: "#5e5e5e",
+            color: '#5e5e5e',
           }
         }
       }
@@ -103,22 +103,22 @@ export class VisCartoComponent implements AfterViewInit {
   /**
    * Initialize Network events
    */
-  init_events() {
-    var data = this.network.body.data;
+  initEvents() {
+    const data = this.network.body.data;
 
     /**
      * When double click
      */
-    this.network.on("doubleClick", function (params) {
-      var nodes_len = params.nodes.length;
-      var edges_len = params.edges.length;
+    this.network.on('doubleClick', (params) => {
+      const NODES_LEN = params.nodes.length;
+      const EDGES_LEN = params.edges.length;
 
       /**
        * If double click on blank -> create a node
        */
-      if (nodes_len == 0 && edges_len == 0) {
-        var coord = params.pointer.canvas
-        var node = { label: prompt("Label ?"), x: coord.x, y: coord.y };
+      if (NODES_LEN === 0 && EDGES_LEN === 0) {
+        const coord = params.pointer.canvas;
+        const node = { label: prompt('Label ?'), x: coord.x, y: coord.y };
         data.nodes.add(node);
       }
     });
@@ -130,28 +130,28 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns For each node : ID + label + connections to
    */
   export() {
-    const nodes = this.network.body.data.nodes;
-    var nodes_new = {};
+    const NODES = this.network.body.data.nodes;
+    const NEW = {};
 
-    nodes.getIds().forEach(function (id) {
-      var node = nodes.get(id);
-      nodes_new[id] = {};
-      nodes_new[id].label = node.label;
-      nodes_new[id].to = this.network.getConnectedNodes(id, "to");
+    NODES.getIds().forEach((id: string) => {
+      const NODE = NODES.get(id);
+      NEW[id] = {};
+      NEW[id].label = NODE.label;
+      NEW[id].to = this.network.getConnectedNodes(id, 'to');
     });
 
-    return JSON.stringify(nodes_new, undefined, 2);
+    return JSON.stringify(NEW, undefined, 2);
   }
 
   /**
    * Import data from JSON
    *
-   * @param raw_json Exported JSON network data
+   * @param rawJson Exported JSON network data
    */
-  import(raw_json: string) {
-    const inputData = JSON.parse(raw_json);
+  import(rawJson: string) {
+    const inputData = JSON.parse(rawJson);
 
-    var data = {
+    const data = {
       nodes: this.getNodeData(inputData),
       edges: this.getEdgeData(inputData),
     };
@@ -165,14 +165,16 @@ export class VisCartoComponent implements AfterViewInit {
    * @param data Imported data
    * @returns Nodes dataset
    */
-  getNodeData(data: object) {
-    var networkNodes = [];
+  getNodeData(data: any) {
+    const networkNodes = [];
 
     for (const id in data) {
-      networkNodes.push({
-        id: id,
-        label: data[id].label
-      });
+      if (Object.prototype.hasOwnProperty.call(data, id)) {
+        networkNodes.push({
+          id,
+          label: data[id].label
+        });
+      }
     }
 
     return new DataSet<any>(networkNodes);
@@ -184,13 +186,13 @@ export class VisCartoComponent implements AfterViewInit {
    * @param data Imported data
    * @returns Edges dataset
    */
-  getEdgeData(data: object) {
-    var networkEdges = [];
+  getEdgeData(data: any) {
+    const networkEdges = [];
 
     for (const id in data) {
-      data[id].to.forEach(function (connId) {
-        networkEdges.push({ from: id, to: connId });
-      });
+      if (Object.prototype.hasOwnProperty.call(data, id)) {
+        data[id].to.forEach((connId: string) => networkEdges.push({ from: id, to: connId }));
+      }
     }
 
     return new DataSet<any>(networkEdges);
