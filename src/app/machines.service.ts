@@ -3,18 +3,18 @@ import { Machine } from './objects/machine';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { LogService} from './log.service'
+import { LogService} from './log.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MachinesService {
-  private api_url = 'http://localhost:4321'
-  private machines_path = '/api/machines';  // URL to web api
-  private machine_path = '/api/machine';  // URL to web api
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' , 'Access-Control-Allow-Origin' : '*'})
   };
+  private api_url = 'http://localhost:4321';
+  private machines_path = '/api/machines';  // URL to web api
+  private machine_path = '/api/machine';  // URL to web api
   constructor(private http: HttpClient, private logService: LogService) { }
 
   getMachines(): Observable<Machine[]> {
@@ -46,7 +46,7 @@ export class MachinesService {
   deleteMachine(hero: Machine | number): Observable<Machine> {
     const id = typeof hero === 'number' ? hero : hero.id;
     const url = `${this.api_url + this.machines_path}/${id}`;
-  
+
     return this.http.delete<Machine>(url, this.httpOptions).pipe(
       tap(_ => this.log(`deleted hero id=${id}`)),
       catchError(this.handleError<Machine>('deleteHero'))
@@ -58,13 +58,13 @@ export class MachinesService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-  
+
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
-  
+
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
-  
+
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };

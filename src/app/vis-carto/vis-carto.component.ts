@@ -12,7 +12,7 @@ import { DataSet } from 'vis-data';
 export class VisCartoComponent implements AfterViewInit {
   @ViewChild('network') nwEl: ElementRef;
   private network: any;
-  
+
   ngAfterViewInit() {
     this.network = new Network(
       this.nwEl.nativeElement,
