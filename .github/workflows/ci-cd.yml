@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Lint
-        run: npm run lint
+        run: npm run lint --fix --force
       - name: Test
         run: npm run test
       - name: Build
