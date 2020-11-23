@@ -12,9 +12,7 @@ import { DataSet } from 'vis-data';
 export class VisCartoComponent implements AfterViewInit {
   @ViewChild('network') nwEl: ElementRef;
   private network: any;
-
-  constructor() { }
-
+  
   ngAfterViewInit() {
     this.network = new Network(
       this.nwEl.nativeElement,
@@ -51,7 +49,29 @@ export class VisCartoComponent implements AfterViewInit {
 
     return { nodes, edges };
   }
+  /*init_dataset() {
+    const nodes = new DataSet<any>([
+      { id: 1, label: "client", group: "client_linux", title: "MAC: aa:aa:aa:aa:aa:aa" },
+      { id: 2, label: "client", group: "client_linux" },
+      { id: 3, label: "client", group: "client_linux" },
+      { id: 4, label: "client" },
+      { id: 5, label: "router", group: "router" },
+      { id: 6, label: "client", group: "client_linux" },
+      { id: 7, label: "client", group: "client_linux" },
+      { id: 8, label: "router", group: "router" },
+    ]);
 
+    const edges = new DataSet<any>([
+      { from: 1, to: 5 },
+      { from: 2, to: 5 },
+      { from: 3, to: 5 },
+      { from: 4, to: 5 },
+      { from: 6, to: 8 },
+      { from: 7, to: 8 },
+    ]);
+
+    return { nodes, edges };
+  }*/
   /**
    * Initialize vis-network options
    */
