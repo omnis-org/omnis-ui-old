@@ -130,13 +130,13 @@ export class VisCartoComponent implements AfterViewInit {
      * When double click
      */
     this.network.on('doubleClick', (params) => {
-      const NODES_LEN = params.nodes.length;
-      const EDGES_LEN = params.edges.length;
+      const nodes_len = params.nodes.length;
+      const edges_len = params.edges.length;
 
       /**
        * If double click on blank -> create a node
        */
-      if (NODES_LEN === 0 && EDGES_LEN === 0) {
+      if (nodes_len === 0 && edges_len === 0) {
         const coord = params.pointer.canvas;
         const node = { label: prompt('Label ?'), x: coord.x, y: coord.y };
         data.nodes.add(node);
@@ -150,17 +150,17 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns For each node : ID + label + connections to
    */
   export() {
-    const NODES = this.network.body.data.nodes;
-    const NEW = {};
+    const nodes = this.network.body.data.nodes;
+    const nodes_new = {};
 
-    NODES.getIds().forEach((id: string) => {
-      const NODE = NODES.get(id);
-      NEW[id] = {};
-      NEW[id].label = NODE.label;
-      NEW[id].to = this.network.getConnectedNodes(id, 'to');
+    nodes.getIds().forEach((id: string) => {
+      const node = nodes.get(id);
+      nodes_new[id] = {};
+      nodes_new[id].label = node.label;
+      nodes_new[id].to = this.network.getConnectedNodes(id, 'to');
     });
 
-    return JSON.stringify(NEW, undefined, 2);
+    return JSON.stringify(nodes_new, undefined, 2);
   }
 
   /**
@@ -169,11 +169,11 @@ export class VisCartoComponent implements AfterViewInit {
    * @param rawJson Exported JSON network data
    */
   import(rawJson: string) {
-    const inputData = JSON.parse(rawJson);
+    const input_data = JSON.parse(rawJson);
 
     const data = {
-      nodes: this.getNodeData(inputData),
-      edges: this.getEdgeData(inputData),
+      nodes: this.getNodeData(input_data),
+      edges: this.getEdgeData(input_data),
     };
 
     this.network.setData(data);
@@ -186,18 +186,18 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns Nodes dataset
    */
   getNodeData(data: any) {
-    const networkNodes = [];
+    const network_nodes = [];
 
     for (const id in data) {
       if (Object.prototype.hasOwnProperty.call(data, id)) {
-        networkNodes.push({
+        network_nodes.push({
           id,
           label: data[id].label
         });
       }
     }
 
-    return new DataSet<any>(networkNodes);
+    return new DataSet<any>(network_nodes);
   }
 
   /**
@@ -207,14 +207,14 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns Edges dataset
    */
   getEdgeData(data: any) {
-    const networkEdges = [];
+    const network_edges = [];
 
     for (const id in data) {
       if (Object.prototype.hasOwnProperty.call(data, id)) {
-        data[id].to.forEach((connId: string) => networkEdges.push({ from: id, to: connId }));
+        data[id].to.forEach((connId: string) => network_edges.push({ from: id, to: connId }));
       }
     }
 
-    return new DataSet<any>(networkEdges);
+    return new DataSet<any>(network_edges);
   }
 }
