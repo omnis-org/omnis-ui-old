@@ -10,6 +10,7 @@ export class LogService {
 
   add(message: string) {
     this.messages.push(message);
+    console.log(message);
   }
 
   clear() {

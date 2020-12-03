@@ -9,5 +9,5 @@ export interface Machine {
   location_id: number;
   operating_system_id: number;
   machine_type_id: number;
-  omnis_id: number;
+  omnis_version: string;
 }

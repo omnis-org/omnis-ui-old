@@ -1,0 +1,26 @@
+.details {
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "content content empty"
+    "leftButton empty rightButton";
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+.detailsheader {
+    background-color: rgb(200, 200, 200);
+    grid-area: header;
+}
+
+.detailsBody {
+    background-color: rgb(240, 240, 240);
+    grid-area: content;
+}
+
+.detailsBody .leftButton {
+    grid-area: leftButton;
+}
+
+.detailsBody .rightButton {
+    grid-area: rightButton;
+}
