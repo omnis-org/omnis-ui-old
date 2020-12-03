@@ -10,17 +10,17 @@ import { LogService} from './log.service';
 })
 export class MachinesService {
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' , 'Access-Control-Allow-Origin' : '*'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
   };
-  private api_url = 'http://localhost:4321';
+  private api_url = 'https://localhost:4321';
   private machines_path = '/api/machines';  // URL to web api
   private machine_path = '/api/machine';  // URL to web api
   constructor(private http: HttpClient, private logService: LogService) { }
 
   getMachines(): Observable<Machine[]> {
     return this.http.get<Machine[]>(this.api_url + this.machines_path).pipe(
-      tap(_ => this.log('fetched heroes')),
-      catchError(this.handleError<Machine[]>('getHeroes', []))
+      tap(_ => this.log('fetched machines')),
+      catchError(this.handleError<Machine[]>('getMachines', []))
     );
   }
 
@@ -32,24 +32,23 @@ export class MachinesService {
     );
   }
   updateMachine(machine: Machine): Observable<any> {
-    return this.http.put(this.api_url + this.machines_path, machine, this.httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${machine.id}`)),
-      catchError(this.handleError<any>('updateHero'))
+    return this.http.put(this.api_url + this.machine_path + '/' + machine.id, machine, this.httpOptions).pipe(
+      tap(_ => this.log(`updated machine id=${machine.id}`)),
+      catchError(this.handleError<any>('updateMachine'))
     );
   }
   addMachine(machine: Machine): Observable<Machine> {
     return this.http.post<Machine>(this.api_url + this.machines_path, machine, this.httpOptions).pipe(
-      tap((newHero: Machine) => this.log(`added machine w/ id=${newHero.id}`)),
+      tap((newMachine: Machine) => this.log(`added machine w/ id=${newMachine.id}`)),
       catchError(this.handleError<Machine>('addMachine'))
     );
   }
-  deleteMachine(hero: Machine | number): Observable<Machine> {
-    const id = typeof hero === 'number' ? hero : hero.id;
-    const url = `${this.api_url + this.machines_path}/${id}`;
-
+  deleteMachine(machine: Machine | number): Observable<Machine> {
+    const id = typeof machine === 'number' ? machine : machine.id;
+    const url = `${this.api_url + this.machine_path}/${id}`;
     return this.http.delete<Machine>(url, this.httpOptions).pipe(
-      tap(_ => this.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Machine>('deleteHero'))
+      tap(_ => this.log(`deleted machine id=${id}`)),
+      catchError(this.handleError<Machine>('deletedMachine'))
     );
   }
   private log(message: string) {

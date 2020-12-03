@@ -1,0 +1,18 @@
+<form *ngIf="machine !== undefined" [formGroup]="detailsForm" (ngSubmit)="onRegister()">
+    <div class="detailsheader">Hostname : {{machine.hostname}}</div>
+    <div class="detailsBody">
+        <ul>
+            <li><span class="badge">Id : {{machine.id}}</span></li>
+            <li><span class="badge">Label : <input type="text" value="{{machine.label}}" formControlName="label"/></span></li>
+            <li><span class="badge">Description : <textarea rows="5" cols="33" formControlName="description">{{machine.description}}</textarea></span></li>
+            <li><span class="badge">
+                Virtualisée : 
+                    <select name="virtualized" formControlName="is_virtualized">
+                        <option *ngFor='let element of virtualization_options' [selected]="element === machine.is_virtualized" [value]="element">{{element}}</option> 
+                    </select>
+                </span>
+            </li>
+        </ul>
+        <button class="leftButton" type="submit" [disabled]="!detailsForm.valid">Enregistrer</button>
+    </div>
+</form>
