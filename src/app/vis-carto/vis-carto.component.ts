@@ -1,7 +1,7 @@
 import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { Machine } from '../objects/machine';
+import { OmnisMachine } from '../objects/machine';
 import { MachinesService } from '../machines.service';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 

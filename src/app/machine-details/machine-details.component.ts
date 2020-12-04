@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Machine } from '../objects/machine';
+import { OmnisMachine } from '../objects/machine';
 import { MachinesService } from '../machines.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { LogService} from '../log.service';
@@ -11,7 +11,7 @@ import { LogService} from '../log.service';
 })
 export class MachineDetailsComponent implements OnInit {
   @Input()
-    machine: Machine;
+    machine: OmnisMachine;
   detailsForm = new FormGroup({
     label: new FormControl(''),
     description: new FormControl(''),
