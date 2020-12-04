@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Interface } from 'objects/interface';
+import { Interface } from './objects/interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { LogService} from './log.service';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InterfaceService {
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   private api_url = 'https://localhost:4321';
   private interfaces_path = '/api/interfaces';  // URL to web api
