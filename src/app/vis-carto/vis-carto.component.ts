@@ -1,9 +1,9 @@
 import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { OmnisMachine } from '../objects/machine';
-import { OmnisInterface } from '../objects/interface';
-import { OmnisNetwork } from '../objects/network';
+import { OmnisMachine } from '../models/machine';
+import { OmnisInterface } from '../models/interface';
+import { OmnisNetwork } from '../models/network';
 import { MachinesService } from '../services/machines.service';
 import { NetworksService } from '../services/networks.service';
 import { InterfaceService } from '../services/interface.service';
@@ -23,7 +23,7 @@ export class VisCartoComponent implements AfterViewInit {
     private machinesService: MachinesService,
     private networksService: NetworksService,
     private interfaceService: InterfaceService,
-    ) { }
+  ) { }
 
   ngAfterViewInit(): void {
     this.network = new Network(
@@ -90,7 +90,7 @@ export class VisCartoComponent implements AfterViewInit {
     const dataset = this.network.body.data.nodes;
     this.clearIdsFromIndex(this.network.body.data.nodes, index);
     dataset.add(network_nodes);
-    this.network.setData({nodes: dataset});
+    this.network.setData({ nodes: dataset });
   }
 
   /**
@@ -220,7 +220,7 @@ export class VisCartoComponent implements AfterViewInit {
     return + index.toString().concat(id.toString());
   }
 
-  private clearIdsFromIndex(dataset: DataSet<any>, index: number){
+  private clearIdsFromIndex(dataset: DataSet<any>, index: number) {
     const ids_to_remove = dataset.getIds({
       filter(item) {
         return (item.group == index);
