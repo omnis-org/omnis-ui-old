@@ -4,9 +4,9 @@ import { DataSet } from 'vis-data';
 import { OmnisMachine } from '../objects/machine';
 import { OmnisInterface } from '../objects/interface';
 import { OmnisNetwork } from '../objects/network';
-import { MachinesService } from '../machines.service';
-import { NetworksService } from '../networks.service';
-import { InterfaceService } from '../interface.service';
+import { MachinesService } from '../services/machines.service';
+import { NetworksService } from '../services/networks.service';
+import { InterfaceService } from '../services/interface.service';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Machine } from '../objects/machine';
-import { MachinesService } from '../machines.service';
-import { LogService} from '../log.service';
+import { OmnisMachine } from '../objects/machine';
+import { MachinesService } from '../services/machines.service';
+import { LogService} from '../services/log.service';
 
 @Component({
   selector: 'app-inventaire',
@@ -10,7 +10,7 @@ import { LogService} from '../log.service';
 })
 
 export class InventaireComponent implements OnInit {
-  machines: Machine[];
+  machines: OmnisMachine[];
   private selectedMachine;
   constructor(private machinesService: MachinesService, private logService: LogService) { }
 
@@ -21,7 +21,7 @@ export class InventaireComponent implements OnInit {
     this.machinesService.getMachines()
     .subscribe(machines => this.machines = machines);
   }
-  onSelect(machine: Machine): void {
+  onSelect(machine: OmnisMachine): void {
       this.selectedMachine = machine;
   }
   onDelete(){
