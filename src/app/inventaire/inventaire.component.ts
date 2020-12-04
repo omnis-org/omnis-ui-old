@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { OmnisMachine } from '../objects/machine';
+import { OmnisMachine } from '../models/machine';
 import { MachinesService } from '../services/machines.service';
-import { LogService} from '../services/log.service';
+import { LogService } from '../services/log.service';
 
 @Component({
   selector: 'app-inventaire',
@@ -19,16 +19,16 @@ export class InventaireComponent implements OnInit {
   }
   getMachines(): void {
     this.machinesService.getMachines()
-    .subscribe(machines => this.machines = machines);
+      .subscribe(machines => this.machines = machines);
   }
   onSelect(machine: OmnisMachine): void {
-      this.selectedMachine = machine;
+    this.selectedMachine = machine;
   }
-  onDelete(){
-    if(this.selectedMachine !== undefined){
+  onDelete() {
+    if (this.selectedMachine !== undefined) {
       this.machinesService.deleteMachine(this.selectedMachine.id).subscribe();
       this.getMachines();
-    }else{
+    } else {
       this.logService.add(`machine-details: Error while loading machines`);
     }
   }

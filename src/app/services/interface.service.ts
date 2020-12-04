@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OmnisInterface } from '../objects/interface';
+import { OmnisInterface } from '../models/interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
