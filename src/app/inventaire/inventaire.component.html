@@ -1,4 +1,4 @@
-<div>
+<div id="inventaire">
     <ul class="machines">
         <li class="selectableList" *ngFor="let machine of machines" (click)="onSelect(machine)">
             <div class="badge">{{machine.hostname}}</div>
@@ -7,5 +7,5 @@
                 <button class="rightButton" (click)="onDelete()">Supprimer</button>
             </div>
         </li>
-      </ul>
+    </ul>
 </div>
