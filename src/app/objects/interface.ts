@@ -1,4 +1,4 @@
-export interface Interface {
+export interface OmnisInterface {
   id: number;
   name: string;
   ipv4: string;

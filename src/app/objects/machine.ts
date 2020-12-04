@@ -1,4 +1,4 @@
-export interface Machine {
+export interface OmnisMachine {
   id: number;
   hostname: string;
   label: string;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interface } from './objects/interface';
+import { OmnisInterface } from './objects/interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -17,38 +17,38 @@ export class InterfaceService {
   private interface_path = '/api/interface';  // URL to web api
   constructor(private http: HttpClient, private logService: LogService) { }
 
-  getInterfaces(): Observable<Interface[]> {
-    return this.http.get<Interface[]>(this.api_url + this.interfaces_path).pipe(
+  getInterfaces(): Observable<OmnisInterface[]> {
+    return this.http.get<OmnisInterface[]>(this.api_url + this.interfaces_path).pipe(
       tap(_ => this.log('fetched Interfaces')),
-      catchError(this.handleError<Interface[]>('getInterfaces', []))
+      catchError(this.handleError<OmnisInterface[]>('getInterfaces', []))
     );
   }
 
-  getInterface(id: number): Observable<Interface> {
+  getInterface(id: number): Observable<OmnisInterface> {
     const url = `${this.api_url + this.interface_path}/${id}`;
-    return this.http.get<Interface>(url).pipe(
+    return this.http.get<OmnisInterface>(url).pipe(
       tap(_ => this.log(`fetched Interface id=${id}`)),
-      catchError(this.handleError<Interface>(`getInterface id=${id}`))
+      catchError(this.handleError<OmnisInterface>(`getInterface id=${id}`))
     );
   }
-  updateInterface(interf: Interface): Observable<any> {
+  updateInterface(interf: OmnisInterface): Observable<any> {
     return this.http.put(this.api_url + this.interface_path + '/' + interf.id, interf, this.httpOptions).pipe(
       tap(_ => this.log(`updated interface id=${interf.id}`)),
       catchError(this.handleError<any>('updateInterface'))
     );
   }
-  addInterface(interf: Interface): Observable<Interface> {
-    return this.http.post<Interface>(this.api_url + this.interfaces_path, interf, this.httpOptions).pipe(
-      tap((newInterface: Interface) => this.log(`added interface w/ id=${interf.id}`)),
-      catchError(this.handleError<Interface>('addInterface'))
+  addInterface(interf: OmnisInterface): Observable<OmnisInterface> {
+    return this.http.post<OmnisInterface>(this.api_url + this.interfaces_path, interf, this.httpOptions).pipe(
+      tap((newInterface: OmnisInterface) => this.log(`added interface w/ id=${interf.id}`)),
+      catchError(this.handleError<OmnisInterface>('addInterface'))
     );
   }
-  deleteInterface(interf: Interface | number): Observable<Interface> {
+  deleteInterface(interf: OmnisInterface | number): Observable<OmnisInterface> {
     const id = typeof interf === 'number' ? interf : interf.id;
     const url = `${this.api_url + this.interface_path}/${id}`;
-    return this.http.delete<Interface>(url, this.httpOptions).pipe(
+    return this.http.delete<OmnisInterface>(url, this.httpOptions).pipe(
       tap(_ => this.log(`deleted interface id=${id}`)),
-      catchError(this.handleError<Interface>('deleteInterface'))
+      catchError(this.handleError<OmnisInterface>('deleteInterface'))
     );
   }
   private log(message: string) {
