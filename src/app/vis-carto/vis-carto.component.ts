@@ -2,7 +2,11 @@ import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { OmnisMachine } from '../objects/machine';
+import { OmnisInterface } from '../objects/interface';
+import { OmnisNetwork } from '../objects/network';
 import { MachinesService } from '../machines.service';
+import { NetworksService } from '../networks.service';
+import { InterfaceService } from '../interface.service';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -15,7 +19,11 @@ export class VisCartoComponent implements AfterViewInit {
   @ViewChild('network') nwEl: ElementRef;
   private network: any;
 
-  constructor(private machinesService: MachinesService) { }
+  constructor(
+    private machinesService: MachinesService,
+    private networksService: NetworksService,
+    private interfaceService: InterfaceService,
+    ) { }
 
   ngAfterViewInit(): void {
     this.network = new Network(
@@ -56,30 +64,33 @@ export class VisCartoComponent implements AfterViewInit {
    * Subscribe to data services
    */
   subscribe(): void {
-    this.machinesService.getMachines().subscribe(machines => this.updateMachines(machines));
+    this.machinesService.getMachines().subscribe(machines => this.updateNodes(machines, 1));
+    this.interfaceService.getInterfaces().subscribe(interfaces => this.updateNodes(interfaces, 2));
+    this.networksService.getNetworks().subscribe(networks => this.updateNodes(networks, 3));
   }
 
-  updateMachines(machines: Machine[]): void {
-    console.log(machines);
-    const data = {
-      nodes: this.getNodeData(machines),
-      edges: new DataSet<any>([]),
-    };
-
-    this.network.setData(data);
-  }
-
-  getNodeData(machines: Machine[]) {
+  updateNodes(data: any[], index: number): void {
     const network_nodes = [];
 
-    machines.forEach((machine: Machine) => {
+    data.forEach((item: any) => {
+      let label: string;
+      if (item.label) {
+        label = item.label;
+      } else if (item.name) {
+        label = item.name;
+      }
+
       network_nodes.push({
-        id: machine.id,
-        label: machine.label
+        group: index,
+        id: + this.computeId(item.id, index),
+        label
       });
     });
 
-    return new DataSet<any>(network_nodes);
+    const dataset = this.network.body.data.nodes;
+    this.clearIdsFromIndex(this.network.body.data.nodes, index);
+    dataset.add(network_nodes);
+    this.network.setData({nodes: dataset});
   }
 
   /**
@@ -203,5 +214,19 @@ export class VisCartoComponent implements AfterViewInit {
         }
       }
     };
+  }
+
+  private computeId(id: number, index: number): number {
+    return + index.toString().concat(id.toString());
+  }
+
+  private clearIdsFromIndex(dataset: DataSet<any>, index: number){
+    const ids_to_remove = dataset.getIds({
+      filter(item) {
+        return (item.group == index);
+      }
+    });
+
+    dataset.remove(ids_to_remove);
   }
 }
