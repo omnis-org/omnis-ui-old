@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OmnisMachine } from '../objects/machine';
-import { MachinesService } from '../machines.service';
+import { MachinesService } from '../services/machines.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { LogService} from '../log.service';
+import { LogService} from '../services/log.service';
 
 @Component({
   selector: 'app-machine-details',
