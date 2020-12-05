@@ -65,7 +65,8 @@ export class VisCartoComponent implements AfterViewInit {
    */
   subscribe(): void {
     this.machinesService.getMachines().subscribe(machines => this.updateNodes(machines, 1));
-    this.interfaceService.getInterfaces().subscribe(interfaces => this.updateNodes(interfaces, 2));
+    // this.interfaceService.getInterfaces().subscribe(interfaces => this.updateNodes(interfaces, 2));
+    this.interfaceService.getInterfaces().subscribe(interfaces => this.updateEdges(interfaces));
     this.networksService.getNetworks().subscribe(networks => this.updateNodes(networks, 3));
   }
 
@@ -81,16 +82,31 @@ export class VisCartoComponent implements AfterViewInit {
       }
 
       network_nodes.push({
-        group: index,
+        group: index.toString(),
         id: + this.computeId(item.id, index),
-        label
+        label,
       });
     });
 
     const dataset = this.network.body.data.nodes;
     this.clearIdsFromIndex(this.network.body.data.nodes, index);
     dataset.add(network_nodes);
-    this.network.setData({ nodes: dataset });
+
+    this.network.setData({nodes: dataset, edges: this.network.body.data.edges});
+  }
+
+  updateEdges(interfaces: OmnisInterface[]): void {
+    const network_edges = [];
+
+    interfaces.forEach((interf: OmnisInterface) => {
+      network_edges.push({
+        from: this.computeId(interf.machine_id, 1),
+        to: this.computeId(interf.network_id, 3)
+      });
+    });
+
+    const dataset = new DataSet<any>(network_edges);;
+    this.network.setData({nodes: this.network.body.data.nodes, edges: dataset});
   }
 
   /**
@@ -192,7 +208,7 @@ export class VisCartoComponent implements AfterViewInit {
         },
       },
       groups: {
-        client: {
+        1: {
           shape: 'icon',
           icon: {
             face: '\'Font Awesome 5 Free\'',
@@ -202,7 +218,7 @@ export class VisCartoComponent implements AfterViewInit {
             color: '#5e5e5e',
           }
         },
-        router: {
+        3: {
           shape: 'icon',
           icon: {
             face: '\'Font Awesome 5 Free\'',
