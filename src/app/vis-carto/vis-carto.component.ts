@@ -92,7 +92,7 @@ export class VisCartoComponent implements AfterViewInit {
     this.clearIdsFromIndex(this.network.body.data.nodes, index);
     dataset.add(network_nodes);
 
-    this.network.setData({nodes: dataset, edges: this.network.body.data.edges});
+    this.network.setData({ nodes: dataset, edges: this.network.body.data.edges });
   }
 
   updateEdges(interfaces: OmnisInterface[]): void {
@@ -106,7 +106,7 @@ export class VisCartoComponent implements AfterViewInit {
     });
 
     const dataset = new DataSet<any>(network_edges);;
-    this.network.setData({nodes: this.network.body.data.nodes, edges: dataset});
+    this.network.setData({ nodes: this.network.body.data.nodes, edges: dataset });
   }
 
   /**
@@ -237,9 +237,10 @@ export class VisCartoComponent implements AfterViewInit {
   }
 
   private clearIdsFromIndex(dataset: DataSet<any>, index: number) {
+    /* eslint-disable prefer-arrow/prefer-arrow-functions */
     const ids_to_remove = dataset.getIds({
       filter(item) {
-        return (item.group == index);
+        return (item.group === index);
       }
     });
 
