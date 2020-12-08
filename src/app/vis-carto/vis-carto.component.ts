@@ -211,7 +211,7 @@ export class VisCartoComponent implements AfterViewInit {
         1: {
           shape: 'icon',
           icon: {
-            face: '\'Font Awesome 5 Free\'',
+            face: '\'FontAwesome\'',
             weight: '900',
             code: '\uf109',
             size: 50,
@@ -221,7 +221,7 @@ export class VisCartoComponent implements AfterViewInit {
         3: {
           shape: 'icon',
           icon: {
-            face: '\'Font Awesome 5 Free\'',
+            face: '\'FontAwesome\'',
             weight: '900',
             code: '\uf233',
             size: 50,
