@@ -1,10 +1,12 @@
 {
     "/admin": {
-      "target": "https://localhost:4320",
+      "target": "https://127.0.0.1:4320",
+      "changeOrigin" : true,
       "secure": false
     },
     "/api": {
-        "target": "https://localhost:4320",
+        "target": "https://127.0.0.1:4320",
+        "changeOrigin" : true,
         "secure": false
       }
   }

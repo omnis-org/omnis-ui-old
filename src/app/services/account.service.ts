@@ -62,11 +62,11 @@ export class AccountService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.stopRefreshTokenTimer();
-        this.router.navigate(['/account/login']);
+        this.router.navigate(['/admin/login']);
     }
 
     register(user: User) {
-        return this.http.post(`${environment.omnisApi}/users/register`, user);
+        return this.http.post(`${environment.omnisApi}/admin/register`, user);
     }
 
     getAll() {
