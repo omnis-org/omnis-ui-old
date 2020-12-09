@@ -6,16 +6,11 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/models';
-import { shareReplay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
-
-    private httpOptions = {
-        headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' })
-    };
 
     constructor(
         private router: Router,
