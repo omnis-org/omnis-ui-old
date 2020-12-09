@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  omnisApi: 'https://localhost:4320'
+  omnisApi: 'http://localhost:4200'
 };
 
 /*

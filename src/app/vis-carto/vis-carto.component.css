@@ -1,9 +1,7 @@
-
 #network {
-    height: 98vh;
-    width: 75%;
-    float: left;
-    border: 1px solid rgb(114, 114, 114);
-    background-size: 40px 40px;
-    background-image: radial-gradient(circle, rgb(114, 114, 114) 1px, rgba(0, 0, 0, 0) 1px);
+  height: 98vh;
+  width: 100%;
+  border: 1px solid rgb(114, 114, 114);
+  background-size: 40px 40px;
+  background-image: radial-gradient(circle, rgb(114, 114, 114) 1px, rgba(0, 0, 0, 0) 1px);
 }

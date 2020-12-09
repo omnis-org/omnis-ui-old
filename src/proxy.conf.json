@@ -1,0 +1,10 @@
+{
+    "/admin": {
+      "target": "https://localhost:4320",
+      "secure": false
+    },
+    "/api": {
+        "target": "https://localhost:4320",
+        "secure": false
+      }
+  }
