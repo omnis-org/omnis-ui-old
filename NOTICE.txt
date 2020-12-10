@@ -1,0 +1,7 @@
+######################
+####### NOTICE #######
+######################
+
+This product contains code from the repository
+https://github.com/cornflourblue/angular-10-registration-login-example
+under License MIT and Copyright (c) 2020 Jason Watmore

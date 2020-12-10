@@ -1,18 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-import { VisCartoComponent } from './vis-carto/vis-carto.component';
+import { ErrorHandler, NgModule, APP_INITIALIZER } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpClientModule } from '@angular/common/http';
-import { InventaireComponent } from './inventaire/inventaire.component';
-import { MachineDetailsComponent } from './machine-details/machine-details.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AppComponent } from '@app/app.component';
+import { AppRoutingModule } from '@app/app-routing.module';
+import { JwtInterceptor, HttpErrorInterceptor, appInitializer } from '@app/providers';
+import { MachineDetailsComponent } from '@app/machine-details';
+import { InventaireComponent } from '@app/inventaire';
+import { VisCartoComponent } from '@app/vis-carto';
+import { AlertComponent } from '@app/alert';
+import { HomeComponent } from '@app/home';
+import { AccountService } from '@app/services';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
+    HomeComponent,
     VisCartoComponent,
     InventaireComponent,
     MachineDetailsComponent
@@ -21,9 +27,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     FontAwesomeModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
