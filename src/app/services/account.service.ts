@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { sha256 } from 'js-sha256';
 import { environment } from '@environments/environment';
 import { User } from '@app/models';
 
@@ -26,6 +26,7 @@ export class AccountService {
     }
 
     login(username, password) {
+        password = sha256(password);
         return this.http.post<User>(`${environment.omnisApi}/admin/login`, { username, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -53,6 +54,7 @@ export class AccountService {
     }
 
     register(user: User) {
+        user.password = sha256(user.password);
         return this.http.post(`${environment.omnisApi}/admin/register`, user);
     }
 
