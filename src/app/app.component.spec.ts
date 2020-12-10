@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AccountService } from './services';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -7,6 +10,14 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+    }).overrideComponent(AppComponent, {
+      set: {
+        providers: [
+          {
+            provide: AccountService, useValue: new AccountService(null, null)
+          },
+        ]
+      }
     }).compileComponents();
   });
 
