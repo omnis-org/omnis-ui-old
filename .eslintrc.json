@@ -45,7 +45,8 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ]
+        ],
+        "no-shadow": "off"
       }
     },
     {

@@ -237,11 +237,9 @@ export class VisCartoComponent implements AfterViewInit {
   }
 
   private clearIdsFromIndex(dataset: DataSet<any>, index: number) {
-    /* eslint-disable prefer-arrow/prefer-arrow-functions */
+
     const ids_to_remove = dataset.getIds({
-      filter(item) {
-        return (item.group === index);
-      }
+      filter: item => item.group === index
     });
 
     dataset.remove(ids_to_remove);

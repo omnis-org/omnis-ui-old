@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AccountService } from '@app/services';
 import { User } from '@app/models';
 
-@Component({ selector: 'app', templateUrl: 'app.component.html' })
+@Component({ selector: 'app-root', templateUrl: 'app.component.html' })
 export class AppComponent {
   title = 'omnis-ui';
   user: User;

@@ -6,7 +6,7 @@ import { AuthGuard } from '@app/guards';
 import { InventaireComponent } from '@app/inventaire';
 import { VisCartoComponent } from '@app/vis-carto';
 
-const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
+const account_module = () => import('./account/account.module').then(x => x.AccountModule);
 //const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
 
 const routes: Routes = [
@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: 'inventaire', component: InventaireComponent, canActivate: [AuthGuard] },
     { path: 'map', component: VisCartoComponent, canActivate: [AuthGuard] },
     //{ path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
-    { path: 'account', loadChildren: accountModule },
+    { path: 'account', loadChildren: account_module },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

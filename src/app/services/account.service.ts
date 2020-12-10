@@ -9,8 +9,9 @@ import { User } from '@app/models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-    private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
+    private userSubject: BehaviorSubject<User>;
+    private refresh_token_timeout;
 
     constructor(
         private router: Router,
@@ -43,20 +44,6 @@ export class AccountService {
             }));
     }
 
-    private refreshTokenTimeout;
-
-    private startRefreshTokenTimer() {
-        // set a timeout to refresh the token a minute before it expires
-        const expires = new Date(this.userValue.expireAt);
-        const timeout = expires.getTime() - Date.now() - (60 * 1000);
-        this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
-    }
-
-    private stopRefreshTokenTimer() {
-        clearTimeout(this.refreshTokenTimeout);
-    }
-
-
     logout() {
         // remove user from local storage and set current user to null
         localStorage.removeItem('user');
@@ -81,7 +68,7 @@ export class AccountService {
         return this.http.put(`${environment.omnisApi}/user/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id == this.userValue.id) {
+                if (id === this.userValue.id) {
                     // update local storage
                     const user = { ...this.userValue, ...params };
                     localStorage.setItem('user', JSON.stringify(user));
@@ -97,10 +84,21 @@ export class AccountService {
         return this.http.delete(`${environment.omnisApi}/user/${id}`)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
-                if (id == this.userValue.id) {
+                if (id === this.userValue.id) {
                     this.logout();
                 }
                 return x;
             }));
+    }
+
+    private startRefreshTokenTimer() {
+        // set a timeout to refresh the token a minute before it expires
+        const expires = new Date(this.userValue.expireAt);
+        const timeout = expires.getTime() - Date.now() - (60 * 1000);
+        this.refresh_token_timeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+    }
+
+    private stopRefreshTokenTimer() {
+        clearTimeout(this.refresh_token_timeout);
     }
 }
