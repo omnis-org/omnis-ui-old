@@ -10,7 +10,8 @@ import { environment } from '@environments/environment';
 })
 export class MachinesService {
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    responseType: 'text/plain' as 'json'
   };
 
   constructor(private http: HttpClient, private logService: LogService) { }
@@ -30,22 +31,23 @@ export class MachinesService {
     );
   }
   updateMachine(machine: OmnisMachine): Observable<any> {
-    return this.http.put(`${environment.omnisApi}/api/machine/${machine.id}`, machine, this.httpOptions).pipe(
+    return this.http.put<any>(`${environment.omnisApi}/api/machine/${machine.id}`, machine, this.httpOptions).pipe(
       tap(_ => this.log(`updated machine id=${machine.id}`)),
       catchError(this.handleError<any>('updateMachine'))
     );
   }
-  addMachine(machine: OmnisMachine): Observable<OmnisMachine> {
-    return this.http.post<OmnisMachine>(`${environment.omnisApi}/api/machine`, machine, this.httpOptions).pipe(
-      tap((newMachine: OmnisMachine) => this.log(`added machine w/ id=${newMachine.id}`)),
+
+  addMachine(machine: OmnisMachine): Observable<any> {
+    return this.http.post<any>(`${environment.omnisApi}/api/machine`, machine, this.httpOptions).pipe(
+      tap(_ => this.log(`added new machine`)),
       catchError(this.handleError<OmnisMachine>('addMachine'))
     );
   }
-  deleteMachine(machine: OmnisMachine | number): Observable<OmnisMachine> {
+  deleteMachine(machine: OmnisMachine | number): Observable<any> {
     const id = typeof machine === 'number' ? machine : machine.id;
-    return this.http.delete<OmnisMachine>(`${environment.omnisApi}/api/machine/${id}`, this.httpOptions).pipe(
+    return this.http.delete<any>(`${environment.omnisApi}/api/machine/${id}`, this.httpOptions).pipe(
       tap(_ => this.log(`deleted machine id=${id}`)),
-      catchError(this.handleError<OmnisMachine>('deletedMachine'))
+      catchError(this.handleError<any>('deletedMachine'))
     );
   }
   private log(message: string) {
