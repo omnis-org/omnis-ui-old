@@ -1,18 +1,37 @@
-<form *ngIf="machine !== undefined" [formGroup]="detailsForm" (ngSubmit)="onRegister()">
-    <div class="detailsheader">Hostname : {{machine.hostname}}</div>
-    <div class="detailsBody">
-        <ul>
-            <li><span class="badge">Id : {{machine.id}}</span></li>
-            <li><span class="badge">Label : <input type="text" value="{{machine.label}}" formControlName="label"/></span></li>
-            <li><span class="badge">Description : <textarea rows="5" cols="33" formControlName="description">{{machine.description}}</textarea></span></li>
-            <li><span class="badge">
-                Virtualisée : 
-                    <select name="virtualized" formControlName="is_virtualized">
-                        <option *ngFor='let element of virtualization_options' [selected]="element === machine.is_virtualized" [value]="element">{{element}}</option> 
-                    </select>
-                </span>
-            </li>
-        </ul>
-        <button class="leftButton" type="submit" [disabled]="!detailsForm.valid">Enregistrer</button>
-    </div>
-</form>
+<div class="card bg-light mb-3" style="max-width: 18rem;">
+<div class="card-header">Hostname : {{machine.hostname}}</div>
+<div class="card-body">
+    <form *ngIf="machine !== undefined" [formGroup]="form" (ngSubmit)="onSave()">
+        <div class="form-group">
+            <label for="label">Label</label>
+            <input type="text" formControlName="label" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.label.errors }" />
+            <div *ngIf="submitted && f.label.errors" class="invalid-feedback">
+                <div *ngIf="f.label.errors.required">Label is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea formControlName="description" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+            <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="is_virtualized">Virtualisée</label>
+            <input type="checkbox" formControlName="is_virtualized" class="form-control" />
+        </div>
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-secondary" type="submit">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+            </button>
+        </div>
+    </form>
+    <button [disabled]="loading2" class="btn btn-secondary" (click)="onDelete()">
+    <span *ngIf="loading2" class="spinner-border spinner-border-sm mr-1"></span>
+    Delete
+    </button>
+</div>
+</div>

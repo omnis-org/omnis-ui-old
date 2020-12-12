@@ -1,12 +1,8 @@
 import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { OmnisMachine } from '../models/machine';
-import { OmnisInterface } from '../models/interface';
-import { OmnisNetwork } from '../models/network';
-import { MachinesService } from '../services/machines.service';
-import { NetworksService } from '../services/networks.service';
-import { InterfaceService } from '../services/interface.service';
+import { OmnisInterface } from '@app/models';
+import { MachineService, NetworkService, InterfaceService } from '@app/services';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -20,8 +16,8 @@ export class VisCartoComponent implements AfterViewInit {
   private network: any;
 
   constructor(
-    private machinesService: MachinesService,
-    private networksService: NetworksService,
+    private machineService: MachineService,
+    private networkService: NetworkService,
     private interfaceService: InterfaceService,
   ) { }
 
@@ -64,13 +60,18 @@ export class VisCartoComponent implements AfterViewInit {
    * Subscribe to data services
    */
   subscribe(): void {
-    this.machinesService.getMachines().subscribe(machines => this.updateNodes(machines, 1));
+    this.updateNodes(this.machineService.machinesValue, 1);
+    this.updateEdges(this.interfaceService.interfacesValue);
+    this.updateNodes(this.networkService.networksValue, 3);
+    this.machineService.machines.subscribe(machines => this.updateNodes(machines, 1));
     // this.interfaceService.getInterfaces().subscribe(interfaces => this.updateNodes(interfaces, 2));
-    this.interfaceService.getInterfaces().subscribe(interfaces => this.updateEdges(interfaces));
-    this.networksService.getNetworks().subscribe(networks => this.updateNodes(networks, 3));
+    this.interfaceService.interfaces.subscribe(interfaces => this.updateEdges(interfaces));
+    this.networkService.networks.subscribe(networks => this.updateNodes(networks, 3));
   }
 
   updateNodes(data: any[], index: number): void {
+    if (data == null) { return; };
+
     const network_nodes = [];
 
     data.forEach((item: any) => {
@@ -96,7 +97,9 @@ export class VisCartoComponent implements AfterViewInit {
   }
 
   updateEdges(interfaces: OmnisInterface[]): void {
+    if (interfaces == null) { return; };
     const network_edges = [];
+
 
     interfaces.forEach((interf: OmnisInterface) => {
       network_edges.push({
