@@ -60,21 +60,38 @@ export class VisCartoComponent implements AfterViewInit {
    * Subscribe to data services
    */
   subscribe(): void {
-    this.updateNodes(this.machineService.machinesValue, 1);
+    this.updateNodes(this.machineService.machinesValue, 'client');
     this.updateEdges(this.interfaceService.interfacesValue);
-    this.updateNodes(this.networkService.networksValue, 3);
-    this.machineService.machines.subscribe(machines => this.updateNodes(machines, 1));
-    // this.interfaceService.getInterfaces().subscribe(interfaces => this.updateNodes(interfaces, 2));
+    this.updateNodes(this.networkService.networksValue, 'network');
+
+    this.machineService.machines.subscribe(machines => this.updateNodes(machines, 'client'));
+    this.networkService.networks.subscribe(networks => this.updateNodes(networks, 'network'));
     this.interfaceService.interfaces.subscribe(interfaces => this.updateEdges(interfaces));
-    this.networkService.networks.subscribe(networks => this.updateNodes(networks, 3));
   }
 
-  updateNodes(data: any[], index: number): void {
+  updateNodes(data: any[], type: string): void {
     if (data == null) { return; };
 
-    const network_nodes = [];
+    const nodes_curr = this.network.body.data.nodes;
+    const nodes_curr_ids = nodes_curr.getIds();
+    const nodes_curr_ids_filtered = nodes_curr_ids.filter(id => this.visid_to_type(id) === type);
 
+    // compute new nodes ids
+    const nodes_new_ids = [];
     data.forEach((item: any) => {
+      nodes_new_ids.push(
+        this.id_to_visid(item.id, type)
+      );
+    });
+
+    // remove nodes that no longer exist
+    const nodes_to_del = nodes_curr_ids_filtered.filter(item => nodes_new_ids.indexOf(item) < 0);
+    nodes_curr.remove(nodes_to_del);
+
+    // add/modify new/existants nodes from current type
+    const nodes_new = [];
+    data.forEach((item: any) => {
+      // compute label
       let label: string;
       if (item.label) {
         label = item.label;
@@ -82,29 +99,25 @@ export class VisCartoComponent implements AfterViewInit {
         label = item.name;
       }
 
-      network_nodes.push({
-        group: index.toString(),
-        id: + this.computeId(item.id, index),
+      nodes_new.push({
+        group: type,
+        id: this.id_to_visid(item.id, type),
         label,
       });
     });
 
-    const dataset = this.network.body.data.nodes;
-    this.clearIdsFromIndex(this.network.body.data.nodes, index);
-    dataset.add(network_nodes);
-
-    this.network.setData({ nodes: dataset, edges: this.network.body.data.edges });
+    nodes_curr.update(nodes_new);
+    this.network.setData({ nodes: nodes_curr, edges: this.network.body.data.edges });
   }
 
   updateEdges(interfaces: OmnisInterface[]): void {
     if (interfaces == null) { return; };
     const network_edges = [];
 
-
     interfaces.forEach((interf: OmnisInterface) => {
       network_edges.push({
-        from: this.computeId(interf.machine_id, 1),
-        to: this.computeId(interf.network_id, 3)
+        from: this.id_to_visid(interf.machine_id, 'client'),
+        to: this.id_to_visid(interf.network_id, 'network')
       });
     });
 
@@ -211,7 +224,7 @@ export class VisCartoComponent implements AfterViewInit {
         },
       },
       groups: {
-        1: {
+        client: {
           shape: 'icon',
           icon: {
             face: '\'Font Awesome 5 Free\'',
@@ -221,7 +234,7 @@ export class VisCartoComponent implements AfterViewInit {
             color: '#5e5e5e',
           }
         },
-        3: {
+        network: {
           shape: 'icon',
           icon: {
             face: '\'Font Awesome 5 Free\'',
@@ -235,16 +248,15 @@ export class VisCartoComponent implements AfterViewInit {
     };
   }
 
-  private computeId(id: number, index: number): number {
-    return + index.toString().concat(id.toString());
+  private id_to_visid(id: number, type: string): string {
+    return type.concat('_' + id.toString());
   }
 
-  private clearIdsFromIndex(dataset: DataSet<any>, index: number) {
+  private visid_to_id(visid: string): number {
+    return +visid.split('_')[1];
+  }
 
-    const ids_to_remove = dataset.getIds({
-      filter: item => item.group === index
-    });
-
-    dataset.remove(ids_to_remove);
+  private visid_to_type(visid: string): string {
+    return visid.split('_')[0];
   }
 }
