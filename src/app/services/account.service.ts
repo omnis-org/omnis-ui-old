@@ -50,7 +50,7 @@ export class AccountService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.stopRefreshTokenTimer();
-        this.router.navigate(['/admin/login']);
+        this.router.navigate(['/account/login']);
     }
 
     register(user: User) {
