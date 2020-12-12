@@ -45,6 +45,8 @@ export class AccountService {
             }));
     }
 
+
+
     logout() {
         // remove user from local storage and set current user to null
         localStorage.removeItem('user');
@@ -94,9 +96,8 @@ export class AccountService {
     }
 
     private startRefreshTokenTimer() {
-        // set a timeout to refresh the token a minute before it expires
-        const expires = new Date(this.userValue.expireAt);
-        const timeout = expires.getTime() - Date.now() - (60 * 1000);
+        const timeout = (this.userValue.expireAt - (Date.now() / 1000)) * 1000 - (60 * 1000);
+        console.log('Timeout ' + timeout);
         this.refresh_token_timeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
     }
 
