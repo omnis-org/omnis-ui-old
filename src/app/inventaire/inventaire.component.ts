@@ -1,35 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { OmnisMachine } from '../models/machine';
-import { MachinesService } from '../services/machines.service';
-import { LogService } from '../services/log.service';
+import { OmnisMachine } from '@app/models';
+import { MachineService } from '@app/services';
 
 @Component({
   selector: 'app-inventaire',
   templateUrl: './inventaire.component.html',
-  styleUrls: ['./inventaire.component.css']
+  styleUrls: ['./inventaire.component.scss']
 })
 
 export class InventaireComponent implements OnInit {
   machines: OmnisMachine[];
-  private selectedMachine;
-  constructor(private machinesService: MachinesService, private logService: LogService) { }
+  private selectedMachineId;
+  constructor(private machinesService: MachineService) { }
 
   ngOnInit(): void {
-    this.getMachines();
-  }
-  getMachines(): void {
-    this.machinesService.getMachines()
-      .subscribe(machines => this.machines = machines);
-  }
-  onSelect(machine: OmnisMachine): void {
-    this.selectedMachine = machine;
-  }
-  onDelete() {
-    if (this.selectedMachine !== undefined) {
-      this.machinesService.deleteMachine(this.selectedMachine.id).subscribe();
-      this.getMachines();
-    } else {
-      this.logService.add(`machine-details: Error while loading machines`);
-    }
+    this.machines = this.machinesService.machinesValue;
+    this.machinesService.machines.subscribe(machines => this.machines = machines);
   }
 }

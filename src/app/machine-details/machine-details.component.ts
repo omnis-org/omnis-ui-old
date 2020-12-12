@@ -1,49 +1,89 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OmnisMachine } from '../models/machine';
-import { MachinesService } from '../services/machines.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { LogService } from '../services/log.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+
+import { MachineService, AlertService } from '@app/services';
+import { OmnisMachine } from '@app/models';
 
 @Component({
   selector: 'app-machine-details',
-  templateUrl: './machine-details.component.html',
-  styleUrls: ['./machine-details.component.css']
+  templateUrl: 'machine-details.component.html',
+  styleUrls: ['./machine-details.component.scss']
 })
 export class MachineDetailsComponent implements OnInit {
-  @Input()
-  machine: OmnisMachine;
-  detailsForm = new FormGroup({
-    label: new FormControl(''),
-    description: new FormControl(''),
-    is_virtualized: new FormControl('')
-  });
-  public virtualization_options = [true, false];
-  constructor(private machinesService: MachinesService, private logService: LogService) { }
+  @Input() machine: OmnisMachine;
+  form: FormGroup;
+  loading = false;
+  loading2 = false;
+  submitted = false;
 
-  ngOnInit(): void {
-    if (this.machine !== undefined) {
-      this.updateFormData();
-    } else {
-      this.logService.add(`machine-details: Error while loading machines`);
-    }
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private machineService: MachineService,
+    private alertService: AlertService
+  ) { }
 
-  updateFormData() {
-    this.detailsForm.patchValue({
-      label: this.machine.label,
-      description: this.machine.description,
-      is_virtualized: this.machine.is_virtualized
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      id: [this.machine.id, Validators.nullValidator],
+      hostname: [this.machine.hostname, Validators.nullValidator],
+      label: [this.machine.label, Validators.required],
+      description: [this.machine.description, Validators.nullValidator],
+      is_virtualized: [this.machine.is_virtualized, Validators.nullValidator],
+      serial_number: [this.machine.serial_number, Validators.nullValidator],
+      perimeter_id: [this.machine.perimeter_id, Validators.nullValidator],
+      location_id: [this.machine.location_id, Validators.nullValidator],
+      operating_system_id: [this.machine.operating_system_id, Validators.nullValidator],
+      machine_type_id: [this.machine.machine_type_id, Validators.nullValidator],
+      omnis_version: [this.machine.omnis_version, Validators.nullValidator]
     });
   }
-  onRegister() {
-    if (this.machine !== undefined) {
-      this.machine.label = this.detailsForm.get('label').value;
-      this.machine.description = this.detailsForm.get('description').value;
-      this.machine.is_virtualized = (this.detailsForm.get('is_virtualized').value === true);
-      this.machinesService.updateMachine(this.machine).subscribe();
-    } else {
-      this.logService.add(`machine-details: Error while loading machines`);
+
+  // convenience getter for easy access to form fields
+  get f() { return this.form.controls; }
+
+  onSave() {
+    this.submitted = true;
+
+    // reset alerts on submit
+    this.alertService.clear();
+
+    // stop here if form is invalid
+    if (this.form.invalid) {
+      return;
     }
+
+    this.loading = true;
+    this.machineService.update(this.form.value)
+      .subscribe({
+        next: () => {
+          this.alertService.success('Modification successful');
+          this.loading = false;
+        },
+        error: error => {
+          this.alertService.error(error);
+          this.loading = false;
+        }
+      });
   }
 
+
+  onDelete() {
+    // reset alerts on submit
+    this.alertService.clear();
+
+    this.loading2 = true;
+    this.machineService.delete(this.machine.id)
+      .subscribe({
+        next: () => {
+          this.alertService.success('Delete successful');
+          this.loading2 = false;
+        },
+        error: error => {
+          this.alertService.error(error);
+          this.loading2 = false;
+        }
+      });
+  }
 }

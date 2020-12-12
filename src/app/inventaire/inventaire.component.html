@@ -1,11 +1,9 @@
 <div id="inventaire">
-    <ul class="machines">
-        <li class="selectableList" *ngFor="let machine of machines" (click)="onSelect(machine)">
-            <div class="badge">{{machine.hostname}}</div>
-            <div class="machines details" *ngIf="selectedMachine === machine && machine !== undefined">
-                <app-machine-details [machine]="machine"></app-machine-details>
-                <button class="rightButton" (click)="onDelete()">Supprimer</button>
-            </div>
-        </li>
-    </ul>
+  <ul class="machines">
+    <div class="card-deck">
+      <li class="machineItem" *ngFor="let machine of machines">
+        <app-machine-details [machine]="machine"></app-machine-details>
+      </li>
+    </div>
+  </ul>
 </div>
