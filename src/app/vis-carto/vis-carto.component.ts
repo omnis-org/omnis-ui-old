@@ -36,8 +36,6 @@ export class VisCartoComponent implements AfterViewInit {
    * Initialize Network events
    */
   initEvents() {
-    const data = this.network.body.data;
-
     /**
      * When double click
      */
@@ -51,7 +49,7 @@ export class VisCartoComponent implements AfterViewInit {
       if (nodes_len === 0 && edges_len === 0) {
         const coord = params.pointer.canvas;
         const node = { label: prompt('Label ?'), x: coord.x, y: coord.y };
-        data.nodes.add(node);
+        this.get_network_nodes().add(node);
       }
     });
   }
@@ -72,7 +70,7 @@ export class VisCartoComponent implements AfterViewInit {
   updateNodes(data: any[], type: string): void {
     if (data == null) { return; };
 
-    const nodes_curr = this.network.body.data.nodes;
+    const nodes_curr = this.get_network_nodes();
     const nodes_curr_ids = nodes_curr.getIds();
     const nodes_curr_ids_filtered = nodes_curr_ids.filter(id => this.visid_to_type(id) === type);
 
@@ -107,7 +105,7 @@ export class VisCartoComponent implements AfterViewInit {
     });
 
     nodes_curr.update(nodes_new);
-    this.network.setData({ nodes: nodes_curr, edges: this.network.body.data.edges });
+    this.network.setData({ nodes: nodes_curr, edges: this.get_network_edges() });
   }
 
   updateEdges(interfaces: OmnisInterface[]): void {
@@ -122,7 +120,7 @@ export class VisCartoComponent implements AfterViewInit {
     });
 
     const dataset = new DataSet<any>(network_edges);;
-    this.network.setData({ nodes: this.network.body.data.nodes, edges: dataset });
+    this.network.setData({ nodes: this.get_network_nodes(), edges: dataset });
   }
 
   /**
@@ -131,7 +129,7 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns For each node : ID + label + connections to
    */
   export() {
-    const nodes = this.network.body.data.nodes;
+    const nodes = this.get_network_nodes();
     const nodes_new = {};
 
     nodes.getIds().forEach((id: string) => {
@@ -258,5 +256,13 @@ export class VisCartoComponent implements AfterViewInit {
 
   private visid_to_type(visid: string): string {
     return visid.split('_')[0];
+  }
+
+  private get_network_nodes(): DataSet<any> {
+    return this.network.body.data.nodes;
+  }
+
+  private get_network_edges(): DataSet<any> {
+    return this.network.body.data.edges;
   }
 }
