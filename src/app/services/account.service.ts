@@ -97,7 +97,6 @@ export class AccountService {
 
     private startRefreshTokenTimer() {
         const timeout = (this.userValue.expireAt - (Date.now() / 1000)) * 1000 - (60 * 1000);
-        console.log('Timeout ' + timeout);
         this.refresh_token_timeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
     }
 
