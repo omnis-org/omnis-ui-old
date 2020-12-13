@@ -72,7 +72,7 @@ export class VisCartoComponent implements AfterViewInit {
 
     const nodes_curr = this.get_network_nodes();
     const nodes_curr_ids = nodes_curr.getIds();
-    const nodes_curr_ids_filtered = nodes_curr_ids.filter(id => this.visid_to_type(id) === type);
+    const nodes_curr_ids_filtered = nodes_curr_ids.filter((id: string) => this.visid_to_type(id) === type);
 
     // compute new nodes ids
     const nodes_new_ids = [];
