@@ -27,7 +27,7 @@ export class NetworkService {
   }
 
   getAll() {
-    return this.http.get<OmnisNetwork[]>(`${environment.omnisApi}/api/networks`)
+    return this.http.get<OmnisNetwork[]>(`${environment.omnisApiUrl}/networks`)
       .pipe(tap((networks) => {
         this.networksSubject.next(networks);
         return networks;
@@ -36,11 +36,11 @@ export class NetworkService {
   }
 
   getById(id: number) {
-    return this.http.get<OmnisNetwork>(`${environment.omnisApi}/api/network/${id}`);
+    return this.http.get<OmnisNetwork>(`${environment.omnisApiUrl}/network/${id}`);
   }
 
   update(network: OmnisNetwork) {
-    return this.http.put<any>(`${environment.omnisApi}/api/network/${network.id}`, network, this.httpOptions)
+    return this.http.put<any>(`${environment.omnisApiUrl}/network/${network.id}`, network, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue;
         const network_to_update = networks.find(m => m.id === network.id);
@@ -51,7 +51,7 @@ export class NetworkService {
   }
 
   add(network: OmnisNetwork) {
-    return this.http.post<any>(`${environment.omnisApi}/api/network`, network, this.httpOptions)
+    return this.http.post<any>(`${environment.omnisApiUrl}/network`, network, this.httpOptions)
       .pipe(tap(network => {
         const networks = this.networksValue;
         networks.push(network);
@@ -61,7 +61,7 @@ export class NetworkService {
 
   delete(network: OmnisNetwork | number) {
     const id = typeof network === 'number' ? network : network.id;
-    return this.http.delete<any>(`${environment.omnisApi}/api/network/${id}`, this.httpOptions)
+    return this.http.delete<any>(`${environment.omnisApiUrl}/network/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue;
         const network_to_delete = networks.find(m => m.id === id);
