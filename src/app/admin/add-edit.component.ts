@@ -22,20 +22,20 @@ export class AddEditComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.id = this.route.snapshot.params['id'];
+        this.id = this.route.snapshot.params.id;
         this.isAddMode = !this.id;
 
         // password not required in edit mode
-        const passwordValidators = [Validators.minLength(6)];
+        const password_validators = [Validators.minLength(6)];
         if (this.isAddMode) {
-            passwordValidators.push(Validators.required);
+            password_validators.push(Validators.required);
         }
 
         this.form = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             username: ['', Validators.required],
-            password: ['', passwordValidators]
+            password: ['', password_validators]
         });
 
         if (!this.isAddMode) {
