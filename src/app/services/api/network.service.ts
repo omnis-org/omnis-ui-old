@@ -43,9 +43,9 @@ export class NetworkService {
     return this.http.put<any>(`${environment.omnisApiUrl}/network/${network.id}`, network, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue;
-        const network_to_update = networks.find(m => m.id === network.id);
-        const i = networks.indexOf(network_to_update);
-        networks.splice(networks.indexOf(network_to_update), 1, network);
+        const networkToUpdate = networks.find(m => m.id === network.id);
+        const i = networks.indexOf(networkToUpdate);
+        networks.splice(networks.indexOf(networkToUpdate), 1, network);
         this.networksSubject.next(networks);
       }));
   }
@@ -64,8 +64,8 @@ export class NetworkService {
     return this.http.delete<any>(`${environment.omnisApiUrl}/network/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue;
-        const network_to_delete = networks.find(m => m.id === id);
-        networks.splice(networks.indexOf(network_to_delete), 1);
+        const networkToDelete = networks.find(m => m.id === id);
+        networks.splice(networks.indexOf(networkToDelete), 1);
         this.networksSubject.next(networks);
       }));
   }

@@ -5,18 +5,18 @@ import { FormGroup } from '@angular/forms';
 export function MustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
         const control = formGroup.controls[controlName];
-        const matching_control = formGroup.controls[matchingControlName];
+        const matchingControl = formGroup.controls[matchingControlName];
 
-        if (matching_control.errors && !matching_control.errors.mustMatch) {
-            // return if another validator has already found an error on the matching_control
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+            // return if another validator has already found an error on the matchingControl
             return;
         }
 
-        // set error on matching_control if validation fails
-        if (control.value !== matching_control.value) {
-            matching_control.setErrors({ mustMatch: true });
+        // set error on matchingControl if validation fails
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ mustMatch: true });
         } else {
-            matching_control.setErrors(null);
+            matchingControl.setErrors(null);
         }
     };
 }

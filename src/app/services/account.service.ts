@@ -8,21 +8,21 @@ import { environment } from '@environments/environment';
 import { User, UserToken } from '@app/models';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const jwt_helper = new JwtHelperService();
+const jwtHelper = new JwtHelperService();
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     public user: Observable<User>;
     private userSubject: BehaviorSubject<User>;
     private userToken: UserToken;
-    private refresh_token_timeout;
+    private refreshTokenTimeout;
 
     constructor(
         private router: Router,
         private http: HttpClient,
     ) {
         this.userToken = JSON.parse(localStorage.getItem('userToken'));
-        this.userSubject = new BehaviorSubject<User>(jwt_helper.decodeToken<User>(this.userToken?.token));
+        this.userSubject = new BehaviorSubject<User>(jwtHelper.decodeToken<User>(this.userToken?.token));
         this.user = this.userSubject.asObservable();
     }
 
@@ -101,17 +101,17 @@ export class AccountService {
 
     private startRefreshTokenTimer() {
         const timeout = (this.userToken.expireAt - (Date.now() / 1000)) * 1000 - (60 * 1000);
-        this.refresh_token_timeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+        this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
     }
 
     private stopRefreshTokenTimer() {
-        clearTimeout(this.refresh_token_timeout);
+        clearTimeout(this.refreshTokenTimeout);
     }
 
     private processUserToken(userToken: UserToken): User {
         this.userToken = userToken;
         localStorage.setItem('userToken', JSON.stringify(this.userToken));
-        const user: User = jwt_helper.decodeToken<User>(this.userToken.token);
+        const user: User = jwtHelper.decodeToken<User>(this.userToken.token);
         this.userSubject.next(user);
         this.startRefreshTokenTimer();
         return user;

@@ -43,9 +43,9 @@ export class MachineService {
     return this.http.put<any>(`${environment.omnisApiUrl}/machine/${machine.id}`, machine, this.httpOptions)
       .pipe(tap(_ => {
         const machines = this.machinesValue;
-        const machine_to_update = machines.find(m => m.id === machine.id);
-        const i = machines.indexOf(machine_to_update);
-        machines.splice(machines.indexOf(machine_to_update), 1, machine);
+        const machineToUpdate = machines.find(m => m.id === machine.id);
+        const i = machines.indexOf(machineToUpdate);
+        machines.splice(machines.indexOf(machineToUpdate), 1, machine);
         this.machinesSubject.next(machines);
       }));
   }
@@ -64,8 +64,8 @@ export class MachineService {
     return this.http.delete<any>(`${environment.omnisApiUrl}/machine/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const machines = this.machinesValue;
-        const machine_to_delete = machines.find(m => m.id === id);
-        machines.splice(machines.indexOf(machine_to_delete), 1);
+        const machineToDelete = machines.find(m => m.id === id);
+        machines.splice(machines.indexOf(machineToDelete), 1);
         this.machinesSubject.next(machines);
       }));
   }

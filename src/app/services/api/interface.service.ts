@@ -43,9 +43,9 @@ export class InterfaceService {
     return this.http.put<any>(`${environment.omnisApiUrl}/interface/${itf.id}`, itf, this.httpOptions)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue;
-        const interface_to_update = interfaces.find(m => m.id === itf.id);
-        const i = interfaces.indexOf(interface_to_update);
-        interfaces.splice(interfaces.indexOf(interface_to_update), 1, itf);
+        const interfaceToUpdate = interfaces.find(m => m.id === itf.id);
+        const i = interfaces.indexOf(interfaceToUpdate);
+        interfaces.splice(interfaces.indexOf(interfaceToUpdate), 1, itf);
         this.interfacesSubject.next(interfaces);
       }));
   }
@@ -64,8 +64,8 @@ export class InterfaceService {
     return this.http.delete<any>(`${environment.omnisApiUrl}/interface/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue;
-        const interface_to_delete = interfaces.find(m => m.id === id);
-        interfaces.splice(interfaces.indexOf(interface_to_delete), 1);
+        const interfaceToDelete = interfaces.find(m => m.id === id);
+        interfaces.splice(interfaces.indexOf(interfaceToDelete), 1);
         this.interfacesSubject.next(interfaces);
       }));
   }
