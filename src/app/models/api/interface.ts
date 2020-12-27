@@ -2,7 +2,7 @@ export class OmnisInterface {
     id: number;
     name: string;
     ipv4: string;
-    ipv4_mask: number;
+    ipv4Mask: number;
     mac: string;
     interfaceType: string;
     machineId: number;

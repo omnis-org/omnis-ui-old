@@ -10,6 +10,7 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
+    firstConnection = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -24,6 +25,10 @@ export class LoginComponent implements OnInit {
             username: ['', Validators.required],
             password: ['', Validators.required]
         });
+
+        this.accountService.firstConnection().subscribe(
+            b => { this.firstConnection = b; }
+        );
     }
 
     // convenience getter for easy access to form fields

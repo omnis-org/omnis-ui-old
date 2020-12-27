@@ -34,6 +34,17 @@ export class AccountService {
         return this.userToken;
     }
 
+
+    firstConnection() {
+        return this.http.get(`${environment.adminUrl}/first`, { responseType: 'text/plain' as 'json' })
+            .pipe(map(res => {
+                if (res === 'TRUE') {
+                    return true;
+                }
+                return false;
+            }));
+    }
+
     login(username, password) {
         password = sha256(password);
         return this.http.post<UserToken>(`${environment.adminUrl}/login`, { username, password })
