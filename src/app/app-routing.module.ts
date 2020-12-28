@@ -5,16 +5,17 @@ import { HomeComponent } from '@app/home';
 import { AuthGuard } from '@app/guards';
 import { InventaireComponent } from '@app/inventaire';
 import { VisCartoComponent } from '@app/vis-carto';
+import { AdminGuard } from '@app/guards/admin.guard';
 
-const account_module = () => import('./account/account.module').then(x => x.AccountModule);
-//const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
+const accountModule = () => import('@app/account/account.module').then(x => x.AccountModule);
+const adminModule = () => import('@app/admin/admin.module').then(x => x.AdminModule);
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'inventaire', component: InventaireComponent, canActivate: [AuthGuard] },
     { path: 'map', component: VisCartoComponent, canActivate: [AuthGuard] },
-    //{ path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
-    { path: 'account', loadChildren: account_module },
+    { path: 'admin', loadChildren: adminModule, canActivate: [AdminGuard] },
+    { path: 'account', loadChildren: accountModule },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

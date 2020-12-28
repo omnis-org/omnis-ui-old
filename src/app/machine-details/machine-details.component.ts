@@ -26,18 +26,20 @@ export class MachineDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      id: [this.machine.id, Validators.nullValidator],
-      hostname: [this.machine.hostname, Validators.nullValidator],
-      label: [this.machine.label, Validators.required],
-      description: [this.machine.description, Validators.nullValidator],
-      is_virtualized: [this.machine.is_virtualized, Validators.nullValidator],
-      serial_number: [this.machine.serial_number, Validators.nullValidator],
-      perimeter_id: [this.machine.perimeter_id, Validators.nullValidator],
-      location_id: [this.machine.location_id, Validators.nullValidator],
-      operating_system_id: [this.machine.operating_system_id, Validators.nullValidator],
-      machine_type_id: [this.machine.machine_type_id, Validators.nullValidator],
-      omnis_version: [this.machine.omnis_version, Validators.nullValidator]
+      id: ['', Validators.nullValidator],
+      hostname: ['', Validators.nullValidator],
+      label: ['', Validators.required],
+      description: ['', Validators.nullValidator],
+      virtualizationSystem: ['', Validators.nullValidator],
+      serialNumber: ['', Validators.nullValidator],
+      perimeterId: ['', Validators.nullValidator],
+      locationId: ['', Validators.nullValidator],
+      operatingSystemId: ['', Validators.nullValidator],
+      machineType: ['', Validators.nullValidator],
+      omnisVersion: ['', Validators.nullValidator]
     });
+
+    this.form.patchValue(this.machine);
   }
 
   // convenience getter for easy access to form fields

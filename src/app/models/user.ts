@@ -3,8 +3,11 @@ export class User {
   username: string;
   firstName: string;
   lastName: string;
-  token: string;
   password: string;
   admin: boolean;
+}
+
+export class UserToken {
+  token: string;
   expireAt: number;
 }

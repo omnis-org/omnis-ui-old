@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/services';
+import { MustMatch } from '@app/validators/must-match.validator';
+import { User } from '@app/models';
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
@@ -25,7 +27,9 @@ export class RegisterComponent implements OnInit {
             lastName: ['', Validators.required],
             username: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(6)]],
-            admin: [false, Validators.nullValidator]
+            confirmPassword: ['', Validators.required]
+        }, {
+            validator: MustMatch('password', 'confirmPassword')
         });
     }
 
@@ -43,8 +47,11 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
+
+        const user: User = this.form.value;
+        user.admin = true;
         this.loading = true;
-        this.accountService.register(this.form.value)
+        this.accountService.register(user)
             .subscribe({
                 next: () => {
                     this.alertService.success('Registration successful', { keepAfterRouteChange: true });

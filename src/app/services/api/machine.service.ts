@@ -27,7 +27,7 @@ export class MachineService {
   }
 
   getAll() {
-    return this.http.get<OmnisMachine[]>(`${environment.omnisApi}/api/machines`)
+    return this.http.get<OmnisMachine[]>(`${environment.omnisApiUrl}/machines`)
       .pipe(tap((machines) => {
         this.machinesSubject.next(machines);
         return machines;
@@ -36,22 +36,22 @@ export class MachineService {
   }
 
   getById(id: number) {
-    return this.http.get<OmnisMachine>(`${environment.omnisApi}/api/machine/${id}`);
+    return this.http.get<OmnisMachine>(`${environment.omnisApiUrl}/machine/${id}`);
   }
 
   update(machine: OmnisMachine) {
-    return this.http.put<any>(`${environment.omnisApi}/api/machine/${machine.id}`, machine, this.httpOptions)
+    return this.http.put<any>(`${environment.omnisApiUrl}/machine/${machine.id}`, machine, this.httpOptions)
       .pipe(tap(_ => {
         const machines = this.machinesValue;
-        const machine_to_update = machines.find(m => m.id === machine.id);
-        const i = machines.indexOf(machine_to_update);
-        machines.splice(machines.indexOf(machine_to_update), 1, machine);
+        const machineToUpdate = machines.find(m => m.id === machine.id);
+        const i = machines.indexOf(machineToUpdate);
+        machines.splice(machines.indexOf(machineToUpdate), 1, machine);
         this.machinesSubject.next(machines);
       }));
   }
 
   add(machine: OmnisMachine) {
-    return this.http.post<any>(`${environment.omnisApi}/api/machine`, machine, this.httpOptions)
+    return this.http.post<any>(`${environment.omnisApiUrl}/machine`, machine, this.httpOptions)
       .pipe(tap(machine => {
         const machines = this.machinesValue;
         machines.push(machine);
@@ -61,11 +61,11 @@ export class MachineService {
 
   delete(machine: OmnisMachine | number) {
     const id = typeof machine === 'number' ? machine : machine.id;
-    return this.http.delete<any>(`${environment.omnisApi}/api/machine/${id}`, this.httpOptions)
+    return this.http.delete<any>(`${environment.omnisApiUrl}/machine/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const machines = this.machinesValue;
-        const machine_to_delete = machines.find(m => m.id === id);
-        machines.splice(machines.indexOf(machine_to_delete), 1);
+        const machineToDelete = machines.find(m => m.id === id);
+        machines.splice(machines.indexOf(machineToDelete), 1);
         this.machinesSubject.next(machines);
       }));
   }

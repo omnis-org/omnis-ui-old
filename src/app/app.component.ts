@@ -12,6 +12,11 @@ export class AppComponent {
     this.accountService.user.subscribe(x => this.user = x);
   }
 
+  get isAdmin() {
+    return this.user && this.user.admin;
+  }
+
+
   logout() {
     this.accountService.logout();
   }

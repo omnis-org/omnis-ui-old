@@ -27,7 +27,7 @@ export class InterfaceService {
   }
 
   getAll() {
-    return this.http.get<OmnisInterface[]>(`${environment.omnisApi}/api/interfaces`)
+    return this.http.get<OmnisInterface[]>(`${environment.omnisApiUrl}/interfaces`)
       .pipe(tap((interfaces) => {
         this.interfacesSubject.next(interfaces);
         return interfaces;
@@ -36,22 +36,22 @@ export class InterfaceService {
   }
 
   getById(id: number) {
-    return this.http.get<OmnisInterface>(`${environment.omnisApi}/api/interface/${id}`);
+    return this.http.get<OmnisInterface>(`${environment.omnisApiUrl}/interface/${id}`);
   }
 
   update(itf: OmnisInterface) {
-    return this.http.put<any>(`${environment.omnisApi}/api/interface/${itf.id}`, itf, this.httpOptions)
+    return this.http.put<any>(`${environment.omnisApiUrl}/interface/${itf.id}`, itf, this.httpOptions)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue;
-        const interface_to_update = interfaces.find(m => m.id === itf.id);
-        const i = interfaces.indexOf(interface_to_update);
-        interfaces.splice(interfaces.indexOf(interface_to_update), 1, itf);
+        const interfaceToUpdate = interfaces.find(m => m.id === itf.id);
+        const i = interfaces.indexOf(interfaceToUpdate);
+        interfaces.splice(interfaces.indexOf(interfaceToUpdate), 1, itf);
         this.interfacesSubject.next(interfaces);
       }));
   }
 
   add(itf: OmnisInterface) {
-    return this.http.post<any>(`${environment.omnisApi}/api/interface`, itf, this.httpOptions)
+    return this.http.post<any>(`${environment.omnisApiUrl}/interface`, itf, this.httpOptions)
       .pipe(tap(itf => {
         const interfaces = this.interfacesValue;
         interfaces.push(itf);
@@ -61,11 +61,11 @@ export class InterfaceService {
 
   delete(itf: OmnisInterface | number) {
     const id = typeof itf === 'number' ? itf : itf.id;
-    return this.http.delete<any>(`${environment.omnisApi}/api/interface/${id}`, this.httpOptions)
+    return this.http.delete<any>(`${environment.omnisApiUrl}/interface/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue;
-        const interface_to_delete = interfaces.find(m => m.id === id);
-        interfaces.splice(interfaces.indexOf(interface_to_delete), 1);
+        const interfaceToDelete = interfaces.find(m => m.id === id);
+        interfaces.splice(interfaces.indexOf(interfaceToDelete), 1);
         this.interfacesSubject.next(interfaces);
       }));
   }

@@ -40,16 +40,16 @@ export class VisCartoComponent implements AfterViewInit {
      * When double click
      */
     this.network.on('doubleClick', (params) => {
-      const nodes_len = params.nodes.length;
-      const edges_len = params.edges.length;
+      const nodesLen = params.nodes.length;
+      const edgesLen = params.edges.length;
 
       /**
        * If double click on blank -> create a node
        */
-      if (nodes_len === 0 && edges_len === 0) {
+      if (nodesLen === 0 && edgesLen === 0) {
         const coord = params.pointer.canvas;
         const node = { label: prompt('Label ?'), x: coord.x, y: coord.y };
-        this.get_network_nodes().add(node);
+        this.getNetworkNodes().add(node);
       }
     });
   }
@@ -70,24 +70,24 @@ export class VisCartoComponent implements AfterViewInit {
   updateNodes(data: any[], type: string): void {
     if (data == null) { return; };
 
-    const nodes_curr = this.get_network_nodes();
-    const nodes_curr_ids = nodes_curr.getIds();
-    const nodes_curr_ids_filtered = nodes_curr_ids.filter((id: string) => this.visid_to_type(id) === type);
+    const nodesCurr = this.getNetworkNodes();
+    const nodesCurrIds = nodesCurr.getIds();
+    const nodesCurrIdsFiltered = nodesCurrIds.filter((id: string) => this.visidToType(id) === type);
 
     // compute new nodes ids
-    const nodes_new_ids = [];
+    const nodesNewIds = [];
     data.forEach((item: any) => {
-      nodes_new_ids.push(
-        this.id_to_visid(item.id, type)
+      nodesNewIds.push(
+        this.idToVisid(item.id, type)
       );
     });
 
     // remove nodes that no longer exist
-    const nodes_to_del = nodes_curr_ids_filtered.filter(item => nodes_new_ids.indexOf(item) < 0);
-    nodes_curr.remove(nodes_to_del);
+    const nodesToDel = nodesCurrIdsFiltered.filter(item => nodesNewIds.indexOf(item) < 0);
+    nodesCurr.remove(nodesToDel);
 
     // add/modify new/existants nodes from current type
-    const nodes_new = [];
+    const nodesNew = [];
     data.forEach((item: any) => {
       // compute label
       let label: string;
@@ -97,30 +97,30 @@ export class VisCartoComponent implements AfterViewInit {
         label = item.name;
       }
 
-      nodes_new.push({
+      nodesNew.push({
         group: type,
-        id: this.id_to_visid(item.id, type),
+        id: this.idToVisid(item.id, type),
         label,
       });
     });
 
-    nodes_curr.update(nodes_new);
-    this.network.setData({ nodes: nodes_curr, edges: this.get_network_edges() });
+    nodesCurr.update(nodesNew);
+    this.network.setData({ nodes: nodesCurr, edges: this.getNetworkEdges() });
   }
 
   updateEdges(interfaces: OmnisInterface[]): void {
     if (interfaces == null) { return; };
-    const network_edges = [];
+    const networkEdges = [];
 
     interfaces.forEach((interf: OmnisInterface) => {
-      network_edges.push({
-        from: this.id_to_visid(interf.machine_id, 'client'),
-        to: this.id_to_visid(interf.network_id, 'network')
+      networkEdges.push({
+        from: this.idToVisid(interf.machineId, 'client'),
+        to: this.idToVisid(interf.networkId, 'network')
       });
     });
 
-    const dataset = new DataSet<any>(network_edges);;
-    this.network.setData({ nodes: this.get_network_nodes(), edges: dataset });
+    const dataset = new DataSet<any>(networkEdges);;
+    this.network.setData({ nodes: this.getNetworkNodes(), edges: dataset });
   }
 
   /**
@@ -129,17 +129,17 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns For each node : ID + label + connections to
    */
   export() {
-    const nodes = this.get_network_nodes();
-    const nodes_new = {};
+    const nodes = this.getNetworkNodes();
+    const nodesNew = {};
 
     nodes.getIds().forEach((id: string) => {
       const node = nodes.get(id);
-      nodes_new[id] = {};
-      nodes_new[id].label = node.label;
-      nodes_new[id].to = this.network.getConnectedNodes(id, 'to');
+      nodesNew[id] = {};
+      nodesNew[id].label = node.label;
+      nodesNew[id].to = this.network.getConnectedNodes(id, 'to');
     });
 
-    return JSON.stringify(nodes_new, undefined, 2);
+    return JSON.stringify(nodesNew, undefined, 2);
   }
 
   /**
@@ -148,11 +148,11 @@ export class VisCartoComponent implements AfterViewInit {
    * @param rawJson Exported JSON network data
    */
   import(rawJson: string) {
-    const input_data = JSON.parse(rawJson);
+    const inputData = JSON.parse(rawJson);
 
     const data = {
-      nodes: this.getNodeDataObs(input_data),
-      edges: this.getEdgeData(input_data),
+      nodes: this.getNodeDataObs(inputData),
+      edges: this.getEdgeData(inputData),
     };
 
     this.network.setData(data);
@@ -165,18 +165,18 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns Nodes dataset
    */
   getNodeDataObs(data: any) {
-    const network_nodes = [];
+    const networkNodes = [];
 
     for (const id in data) {
       if (Object.prototype.hasOwnProperty.call(data, id)) {
-        network_nodes.push({
+        networkNodes.push({
           id,
           label: data[id].label
         });
       }
     }
 
-    return new DataSet<any>(network_nodes);
+    return new DataSet<any>(networkNodes);
   }
 
   /**
@@ -186,15 +186,15 @@ export class VisCartoComponent implements AfterViewInit {
    * @returns Edges dataset
    */
   getEdgeData(data: any) {
-    const network_edges = [];
+    const networkEdges = [];
 
     for (const id in data) {
       if (Object.prototype.hasOwnProperty.call(data, id)) {
-        data[id].to.forEach((connId: string) => network_edges.push({ from: id, to: connId }));
+        data[id].to.forEach((connId: string) => networkEdges.push({ from: id, to: connId }));
       }
     }
 
-    return new DataSet<any>(network_edges);
+    return new DataSet<any>(networkEdges);
   }
 
   /**
@@ -246,23 +246,23 @@ export class VisCartoComponent implements AfterViewInit {
     };
   }
 
-  private id_to_visid(id: number, type: string): string {
+  private idToVisid(id: number, type: string): string {
     return type.concat('_' + id.toString());
   }
 
-  private visid_to_id(visid: string): number {
+  private visidToId(visid: string): number {
     return +visid.split('_')[1];
   }
 
-  private visid_to_type(visid: string): string {
+  private visidToType(visid: string): string {
     return visid.split('_')[0];
   }
 
-  private get_network_nodes(): DataSet<any> {
+  private getNetworkNodes(): DataSet<any> {
     return this.network.body.data.nodes;
   }
 
-  private get_network_edges(): DataSet<any> {
+  private getNetworkEdges(): DataSet<any> {
     return this.network.body.data.edges;
   }
 }
