@@ -8,7 +8,7 @@ export const environment = {
 
   omnisApiUrl: `${serverUrl}/api/omnis`,
   adminApiUrl: `${serverUrl}/api/admin`,
-  adminUrl: `${serverUrl}/admin`
+  adminUrl: `${serverUrl}/server-admin`
 };
 
 /*

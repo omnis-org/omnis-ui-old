@@ -9,9 +9,12 @@
         "changeOrigin" : true,
         "secure": false
     },
-    "/admin": {
+    "/server-admin": {
       "target": "https://127.0.0.1:4320",
       "changeOrigin" : true,
-      "secure": false
+      "secure": false,
+      "pathRewrite": {
+        "^/server-admin": "/admin"
+      }
     }
   }
