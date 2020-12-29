@@ -2,6 +2,10 @@
 
 Omnis Web Interface
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/omnis-org/omnis-ui/omnis-ui)
+[![Depfu](https://badges.depfu.com/badges/ea9ecbbec184051b4a1857946670e77d/overview.svg)](https://depfu.com/github/omnis-org/omnis-ui?project_id=18604)
+![GitHub](https://img.shields.io/github/license/omnis-org/omnis-ui)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
 
 ## Development server
