@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { MachineService, AlertService } from '@app/services';
+import { MachineService, AlertService, AccountService } from '@app/services';
 import { OmnisMachine } from '@app/models';
 
 @Component({
@@ -19,6 +19,7 @@ export class MachineDetailsComponent implements OnInit {
   submitted = false;
 
   constructor(
+    public accountService: AccountService,
     private formBuilder: FormBuilder,
     private machineService: MachineService,
     private alertService: AlertService
