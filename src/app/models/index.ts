@@ -1,5 +1,10 @@
-﻿export * from './user';
-export * from './alert';
-export * from './api/interface';
-export * from './api/machine';
-export * from './api/network';
+﻿export * from './alert';
+
+// ADMIN
+export * from './admin/user';
+export * from './admin/role';
+
+// OMNIS
+export * from './omnis/interface';
+export * from './omnis/machine';
+export * from './omnis/network';

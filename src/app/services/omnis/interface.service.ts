@@ -50,7 +50,7 @@ export class InterfaceService {
       }));
   }
 
-  add(itf: OmnisInterface) {
+  insert(itf: OmnisInterface) {
     return this.http.post<any>(`${environment.omnisApiUrl}/interface`, itf, this.httpOptions)
       .pipe(tap(itf => {
         const interfaces = this.interfacesValue;
@@ -59,8 +59,7 @@ export class InterfaceService {
       }));
   }
 
-  delete(itf: OmnisInterface | number) {
-    const id = typeof itf === 'number' ? itf : itf.id;
+  delete(id: string | number) {
     return this.http.delete<any>(`${environment.omnisApiUrl}/interface/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue;

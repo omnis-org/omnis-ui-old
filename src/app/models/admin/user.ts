@@ -4,7 +4,7 @@ export class User {
   firstName: string;
   lastName: string;
   password: string;
-  admin: boolean;
+  roleId: number;
 }
 
 export class UserToken {
