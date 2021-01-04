@@ -1,0 +1,40 @@
+﻿<h1 *ngIf="isAddMode">Add Role</h1>
+<h1 *ngIf="!isAddMode">Edit Role</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="form-group col-6">
+            <label for="name">Name</label>
+            <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">Name is required</div>
+            </div>
+        </div>
+        <div class="form-group col-6">
+            <label for="omnisPermissions">Omnis Permissions</label>
+            <app-permissions class="row" formControlName="omnisPermissions"></app-permissions>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="rolesPermissions">Roles Permissions</label>
+            <app-permissions class="row" formControlName="rolesPermissions"></app-permissions>
+        </div>
+        <div class="form-group col-6">
+            <label for="usersPermissions">Users Permissions</label>
+            <app-permissions class="row" formControlName="usersPermissions"></app-permissions>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="pendingMachinesPermissions">Pending Machines Permissions</label>
+            <app-permissions class="row" formControlName="pendingMachinesPermissions"></app-permissions>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/admin/roles" class="btn btn-link">Cancel</a>
+    </div>
+</form>
