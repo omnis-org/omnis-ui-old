@@ -1,0 +1,35 @@
+﻿<h1>Pending Machines</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 20%">ID</th>
+            <th style="width: 40%">UUID</th>
+            <th style="width: 30%">HOSTNAME</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let pendingMachine of pendingMachines">
+            <td>{{pendingMachine.id}}</td>
+            <td>{{pendingMachine.uuid}}</td>
+            <td>{{pendingMachine.hostname}}</td>
+            <td style="white-space: nowrap">
+                <button (click)="authorizeMachine(pendingMachine.id)" *ngIf="this.accountService.pendingMachinesUpdatePermission" class="btn btn-sm btn-success btn-authorize-machine mr-1" [disabled]="pendingMachine.isAuthorize">
+                    <span *ngIf="pendingMachine.isAuthorize" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!pendingMachine.isAuthorize">Authorize</span>
+                </button>
+                
+                <button (click)="unauthorizeMachine(pendingMachine.id)" *ngIf="this.accountService.pendingMachinesUpdatePermission" class="btn btn-sm btn-danger btn-refuse-machine" [disabled]="pendingMachine.isUnauthorize">
+                    <span *ngIf="pendingMachine.isUnauthorize" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!pendingMachine.isUnauthorize">Unauthorised</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!pendingMachines">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
