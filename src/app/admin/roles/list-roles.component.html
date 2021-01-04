@@ -1,0 +1,68 @@
+﻿<h1>Roles</h1>
+<a routerLink="add" *ngIf="this.accountService.rolesInsertPermission" class="btn btn-sm btn-success mb-2">Add Role</a>
+<table class="table">
+    <tbody>
+    <td class ="text-center">
+        <span class ="point allPermissions"></span>
+        <span class="pointDescription">All permissions</span>
+    </td>
+    <td class ="text-center">
+        <span class ="point noPermissions"></span>
+        <span class="pointDescription">No permissions</span>
+    </td>
+    <td class ="text-center">
+        <span class ="point partialPermissions"></span>
+        <span class="pointDescription">Partial permissions</span>
+    </td>
+    </tbody>
+</table>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 20%">Name</th>
+            <th class="text-center" style="width: 15%">Omnis</th>
+            <th class="text-center" style="width: 15%">Roles</th>
+            <th class="text-center" style="width: 15%">Users</th>
+            <th class="text-center" style="width: 15%">Pending Machines</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let role of roles">
+            <td>{{role.name}}</td>
+            <td class="text-center">
+                <span class ="point" [ngClass]="{ 'allPermissions' : role.omnisPermissions === 15, 
+                'partialPermissions' : role.omnisPermissions < 15 && role.omnisPermissions > 0, 
+                'noPermissions' : role.omnisPermissions == 0}"></span>
+            </td>
+            <td class="text-center">
+                <span class ="point" [ngClass]="{ 'allPermissions' : role.rolesPermissions === 15, 
+                'partialPermissions' : role.rolesPermissions < 15 && role.rolesPermissions > 0, 
+                'noPermissions' : role.rolesPermissions == 0}"></span>
+            </td>
+            <td class="text-center">
+                <span class ="point" [ngClass]="{ 'allPermissions' : role.usersPermissions === 15, 
+                'partialPermissions' : role.usersPermissions < 15 && role.usersPermissions > 0, 
+                'noPermissions' : role.usersPermissions == 0}"></span>
+            </td>
+            <td class="text-center">
+                <span class ="point" [ngClass]="{ 'allPermissions' : role.pendingMachinesPermissions === 15, 
+                'partialPermissions' : role.pendingMachinesPermissions < 15 && role.pendingMachinesPermissions > 0, 
+                'noPermissions' : role.pendingMachinesPermissions == 0}"></span>
+            </td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{role.id}}" *ngIf="this.accountService.rolesUpdatePermission" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deleteRole(role.id)" *ngIf="this.accountService.rolesDeletePermission" class="btn btn-sm btn-danger btn-delete-role" [disabled]="role.isDeleting">
+                    <span *ngIf="role.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!role.isDeleting">Delete</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!roles">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
