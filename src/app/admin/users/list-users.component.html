@@ -1,5 +1,5 @@
 ﻿<h1>Users</h1>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">Add User</a>
+<a routerLink="add" class="btn btn-sm btn-success mb-2" *ngIf="this.accountService.usersInsertPermission">Add User</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -15,8 +15,8 @@
             <td>{{user.lastName}}</td>
             <td>{{user.username}}</td>
             <td style="white-space: nowrap">
-                <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
+                <a routerLink="edit/{{user.id}}" *ngIf="this.accountService.usersUpdatePermission" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deleteUser(user.id)" *ngIf="this.accountService.usersDeletePermission" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
                     <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!user.isDeleting">Delete</span>
                 </button>
