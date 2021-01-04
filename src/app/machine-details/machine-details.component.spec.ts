@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MachineDetailsComponent } from './machine-details.component';
-import { MachineService, AlertService } from '@app/services';
+import { MachineService, AlertService, AccountService } from '@app/services';
 import { HttpClient } from '@angular/common/http';
 import { OmnisMachine } from '@app/models';
 
@@ -16,6 +16,14 @@ describe('MachineDetailsComponent', () => {
       declarations: [MachineDetailsComponent],
       imports: [ReactiveFormsModule, HttpClientTestingModule],
       providers: [MachineService, AlertService]
+    }).overrideComponent(MachineDetailsComponent, {
+      set: {
+        providers: [
+          {
+            provide: AccountService, useValue: new AccountService(null, null, null)
+          },
+        ]
+      }
     })
       .compileComponents();
   });
