@@ -1,1 +1,11 @@
+.dropdown-item {
+  color: black !important;
+}
 
+.dropdown-item:active {
+  background-color: #AAAAAA;
+}
+
+.dropdown-item.active {
+  background-color: #AAAAAA;
+}
