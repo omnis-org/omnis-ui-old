@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
 
 
         const user: User = this.form.value;
-        user.admin = true;
+        user.roleId = 1;
         this.loading = true;
         this.accountService.register(user)
             .subscribe({

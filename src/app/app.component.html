@@ -6,18 +6,23 @@
                 <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
             </li>
             <li class="nav-item" >
-                <a class="nav-link"  routerLinkActive="active" routerLink="/map">Map</a>
+                <a class="nav-link" *ngIf="this.accountService.omnisReadPermission" routerLinkActive="active" routerLink="/map">Map</a>
             </li>
             <li class="nav-item" >
-                <a class="nav-link" routerLinkActive="active" routerLink="/inventaire" >Inventaire</a>
+                <a class="nav-link" *ngIf="this.accountService.omnisReadPermission" routerLinkActive="active" routerLink="/inventaire" >Inventaire</a>
             </li>
         </ul>
     </div>
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item" >
-                <a class="nav-link" routerLinkActive="active" routerLink="/admin" *ngIf="isAdmin">Admin</a>
-            </li>
+            <li class="nav-item dropdown" *ngIf="this.accountService.oneAdminReadPermision">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin </a>
+                <div class="dropdown-menu">
+                  <a class="nav-link dropdown-item" routerLinkActive="active"  *ngIf="this.accountService.pendingMachinesReadPermission" routerLink="/admin/machines">Pending Machines</a>
+                  <a class="nav-link dropdown-item" routerLinkActive="active" *ngIf="this.accountService.usersReadPermission" routerLink="/admin/users">Users</a>
+                  <a class="nav-link dropdown-item" routerLinkActive="active" *ngIf="this.accountService.rolesReadPermission" routerLink="/admin/roles">Roles</a>
+                </div>
+              </li>
             <li class="nav-item">
                 <a class="nav-link" (click)="logout()">Logout</a>
             </li>
