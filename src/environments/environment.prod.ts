@@ -1,4 +1,8 @@
+const serverUrl = 'http://localhost:4200';
+
 export const environment = {
   production: true,
-  omnisApi: 'http://localhost:4200'
+  omnisApiUrl: `${serverUrl}/api/omnis`,
+  adminApiUrl: `${serverUrl}/api/admin`,
+  adminUrl: `${serverUrl}/server-admin`
 };
