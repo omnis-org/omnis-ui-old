@@ -1,5 +1,7 @@
 export class OmnisMachine {
     id: number;
+    uuid: string;
+    authorized: boolean;
     hostname: string;
     label: string;
     description: string;
