@@ -14,7 +14,7 @@ describe('AppComponent', () => {
       set: {
         providers: [
           {
-            provide: AccountService, useValue: new AccountService(null, null)
+            provide: AccountService, useValue: new AccountService(null, null, null)
           },
         ]
       }
