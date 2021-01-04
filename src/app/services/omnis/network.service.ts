@@ -50,7 +50,7 @@ export class NetworkService {
       }));
   }
 
-  add(network: OmnisNetwork) {
+  insert(network: OmnisNetwork) {
     return this.http.post<any>(`${environment.omnisApiUrl}/network`, network, this.httpOptions)
       .pipe(tap(network => {
         const networks = this.networksValue;
@@ -59,8 +59,7 @@ export class NetworkService {
       }));
   }
 
-  delete(network: OmnisNetwork | number) {
-    const id = typeof network === 'number' ? network : network.id;
+  delete(id: string | number) {
     return this.http.delete<any>(`${environment.omnisApiUrl}/network/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue;

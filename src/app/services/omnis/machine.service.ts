@@ -50,7 +50,7 @@ export class MachineService {
       }));
   }
 
-  add(machine: OmnisMachine) {
+  insert(machine: OmnisMachine) {
     return this.http.post<any>(`${environment.omnisApiUrl}/machine`, machine, this.httpOptions)
       .pipe(tap(machine => {
         const machines = this.machinesValue;
@@ -59,8 +59,7 @@ export class MachineService {
       }));
   }
 
-  delete(machine: OmnisMachine | number) {
-    const id = typeof machine === 'number' ? machine : machine.id;
+  delete(id: string | number) {
     return this.http.delete<any>(`${environment.omnisApiUrl}/machine/${id}`, this.httpOptions)
       .pipe(tap(_ => {
         const machines = this.machinesValue;
@@ -69,4 +68,20 @@ export class MachineService {
         this.machinesSubject.next(machines);
       }));
   }
+
+
+  // ADMIN
+
+  getPendingMachines() {
+    return this.http.get<OmnisMachine[]>(`${environment.adminUrl}/pending_machines/`);
+  }
+
+  authorize(id: string | number) {
+    return this.http.put<any>(`${environment.adminUrl}/pending_machine/${id}/authorize`, null, this.httpOptions);
+  }
+
+  unauthorize(id: string | number) {
+    return this.http.put<any>(`${environment.adminUrl}/pending_machine/${id}/unauthorize`, null, this.httpOptions);
+  }
+
 }
