@@ -3,11 +3,11 @@ import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/services';
 
-@Component({ templateUrl: 'list.component.html' })
-export class ListComponent implements OnInit {
+@Component({ templateUrl: 'list-users.component.html' })
+export class ListUsersComponent implements OnInit {
     users = null;
 
-    constructor(private accountService: AccountService, private alertService: AlertService) { }
+    constructor(public accountService: AccountService, private alertService: AlertService) { }
 
     ngOnInit() {
         this.accountService.getAll()

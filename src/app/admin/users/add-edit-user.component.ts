@@ -3,13 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '@app/services';
+import { AccountService, AlertService, RoleService } from '@app/services';
+import { Role } from '@app/models';
 
-@Component({ templateUrl: 'add-edit.component.html' })
-export class AddEditComponent implements OnInit {
+@Component({ templateUrl: 'add-edit-user.component.html' })
+export class AddEditUserComponent implements OnInit {
     form: FormGroup;
     id: string;
     isAddMode: boolean;
+    roles: Role[];
     loading = false;
     submitted = false;
 
@@ -18,12 +20,22 @@ export class AddEditComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private roleService: RoleService
     ) { }
 
     ngOnInit() {
         this.id = this.route.snapshot.params.id;
         this.isAddMode = !this.id;
+
+        this.roleService.getAll().subscribe({
+            next: roles => {
+                this.roles = roles;
+            },
+            error: error => {
+                this.alertService.error(error);
+            }
+        });
 
         // password not required in edit mode
         const passwordValidators = [Validators.minLength(6)];
@@ -35,7 +47,8 @@ export class AddEditComponent implements OnInit {
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             username: ['', Validators.required],
-            password: ['', passwordValidators]
+            password: ['', passwordValidators],
+            roleId: [0, Validators.required]
         });
 
         if (!this.isAddMode) {
