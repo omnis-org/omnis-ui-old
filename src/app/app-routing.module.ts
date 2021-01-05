@@ -5,6 +5,7 @@ import { HomeComponent } from '@app/home';
 import { AuthGuard } from '@app/guards';
 import { InventaireComponent } from '@app/inventaire';
 import { VisCartoComponent } from '@app/vis-carto';
+import { NotifsComponent } from '@app/notifs';
 import { AdminGuard } from '@app/guards/admin.guard';
 
 const accountModule = () => import('@app/account/account.module').then(x => x.AccountModule);
@@ -14,6 +15,7 @@ const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'inventaire', component: InventaireComponent, canActivate: [AuthGuard] },
     { path: 'map', component: VisCartoComponent, canActivate: [AuthGuard] },
+    { path: 'notifications', component: NotifsComponent, canActivate: [AuthGuard] },
     { path: 'admin', loadChildren: adminModule, canActivate: [AdminGuard] },
     { path: 'account', loadChildren: accountModule },
 

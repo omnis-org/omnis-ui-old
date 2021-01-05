@@ -8,3 +8,4 @@ export * from './admin/role';
 export * from './omnis/interface';
 export * from './omnis/machine';
 export * from './omnis/network';
+export * from './omnis/notification';

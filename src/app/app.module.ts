@@ -13,6 +13,7 @@ import { VisCartoComponent } from '@app/vis-carto';
 import { AlertComponent } from '@app/alert';
 import { HomeComponent } from '@app/home';
 import { AccountService } from '@app/services';
+import { NotifsComponent } from './notifs/notifs.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AccountService } from '@app/services';
     HomeComponent,
     VisCartoComponent,
     InventaireComponent,
-    MachineDetailsComponent
+    MachineDetailsComponent,
+    NotifsComponent
   ],
   imports: [
     BrowserModule,
