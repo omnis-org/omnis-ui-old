@@ -1,7 +1,22 @@
+.mapTab {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 90vh;
+
+}
+.mapTab.detail {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
 #network {
-  height: 98vh;
-  width: 100%;
+  grid-column-start: 1;
+  grid-column-end: auto;
   border: 1px solid rgb(114, 114, 114);
   background-size: 40px 40px;
   background-image: radial-gradient(circle, rgb(114, 114, 114) 1px, rgba(0, 0, 0, 0) 1px);
+  grid-row-start: 1;
+  grid-row-end: 1;
 }

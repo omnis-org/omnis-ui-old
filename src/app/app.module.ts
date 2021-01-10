@@ -13,6 +13,8 @@ import { VisCartoComponent } from '@app/vis-carto';
 import { AlertComponent } from '@app/alert';
 import { HomeComponent } from '@app/home';
 import { AccountService } from '@app/services';
+import { CommonModule } from '@angular/common';
+import { NetworkDetailComponent } from './network-detail/network-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,10 +23,12 @@ import { AccountService } from '@app/services';
     HomeComponent,
     VisCartoComponent,
     InventaireComponent,
-    MachineDetailsComponent
+    MachineDetailsComponent,
+    NetworkDetailComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     FontAwesomeModule,
     HttpClientModule,
     ReactiveFormsModule,
