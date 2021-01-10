@@ -1,1 +1,9 @@
-<div id="network" #network></div>
+<div class="mapTab">
+    <div id="network" #network></div>
+    <div class="detail" *ngIf="typeOfSelectedObject === 'client'">
+        <app-machine-details [machine]="object"></app-machine-details>
+    </div>
+    <div class="detail" *ngIf="typeOfSelectedObject === 'network'"> 
+        <app-network-detail [network]="object"></app-network-detail>    
+    </div>
+</div>

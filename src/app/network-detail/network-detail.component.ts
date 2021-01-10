@@ -1,57 +1,46 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-
-import { MachineService, AlertService, AccountService } from '@app/services';
-import { OmnisMachine } from '@app/models';
+import { OmnisNetwork } from '@app/models';
+import { AlertService, NetworkService } from '@app/services';
 
 @Component({
-  selector: 'app-machine-details',
-  templateUrl: 'machine-details.component.html',
-  styleUrls: ['./machine-details.component.scss']
+  selector: 'app-network-detail',
+  templateUrl: './network-detail.component.html',
+  styleUrls: ['./network-detail.component.scss']
 })
-export class MachineDetailsComponent implements OnInit {
-  //A OmnisMachine object must be given to the class
-  @Input() machine: OmnisMachine;
+export class NetworkDetailComponent implements OnInit {
+  @Input() network: OmnisNetwork;
   form: FormGroup;
 
   loading = false;
   loading2 = false;
   submitted = false;
-
   constructor(
-    public accountService: AccountService,
     private formBuilder: FormBuilder,
-    private machineService: MachineService,
+    private networkService: NetworkService,
     private alertService: AlertService
   ) { }
 
   ngOnInit() {
-    if (this.machine !== undefined){
+    if (this.network !== undefined){
       this.form = this.formBuilder.group({
         id: ['', Validators.nullValidator],
-        hostname: ['', Validators.nullValidator],
-        label: ['', Validators.required],
-        description: ['', Validators.nullValidator],
-        virtualizationSystem: ['', Validators.nullValidator],
-        serialNumber: ['', Validators.nullValidator],
-        perimeterId: ['', Validators.nullValidator],
-        locationId: ['', Validators.nullValidator],
-        operatingSystemId: ['', Validators.nullValidator],
-        machineType: ['', Validators.nullValidator],
-        omnisVersion: ['', Validators.nullValidator]
+        name: ['', Validators.nullValidator],
+        ipv4: ['', Validators.required],
+        ipv4Mask: ['', Validators.nullValidator],
+        isDmz: ['', Validators.nullValidator],
+        hasWifi: ['', Validators.nullValidator],
+        perimeterId: ['', Validators.nullValidator]
       });
 
-      this.form.patchValue(this.machine);
+      this.form.patchValue(this.network);
     }
   }
 
-  // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
   onSave() {
-    if (this.machine !== undefined){
+    if (this.network !== undefined){
       this.submitted = true;
 
       // reset alerts on submit
@@ -64,7 +53,7 @@ export class MachineDetailsComponent implements OnInit {
 
       this.loading = true;
       //Subscription to the machine update function observable
-      this.machineService.update(this.form.value)
+      this.networkService.update(this.form.value)
       .subscribe({
         //when a new value is updated in the observable object, the alertService displays an alert
         next: () => {
@@ -82,13 +71,13 @@ export class MachineDetailsComponent implements OnInit {
 
 
   onDelete() {
-    if (this.machine !== undefined){
+    if (this.network !== undefined){
       // reset alerts on submit
       this.alertService.clear();
 
       this.loading2 = true;
       //Subscription to the machine delete function observable
-      this.machineService.delete(this.machine.id)
+      this.networkService.delete(this.network.id)
       .subscribe({
         //when a new value is deleted in the observable object, the alertService displays an alert
         next: () => {

@@ -1,7 +1,7 @@
-import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, ViewChild, Type } from '@angular/core';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { OmnisInterface } from '@app/models';
+import { OmnisInterface, OmnisMachine, OmnisNetwork } from '@app/models';
 import { MachineService, NetworkService, InterfaceService } from '@app/services';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,8 +13,13 @@ import { MachineService, NetworkService, InterfaceService } from '@app/services'
 
 export class VisCartoComponent implements AfterViewInit {
   @ViewChild('network') nwEl: ElementRef;
+  //the detailed object
+  object: OmnisMachine|OmnisNetwork;
+  //a local instance of machines
+  machines: OmnisMachine[];
+  networks: OmnisNetwork[];
+  typeOfSelectedObject: any;
   private network: any;
-
   constructor(
     private machineService: MachineService,
     private networkService: NetworkService,
@@ -37,8 +42,25 @@ export class VisCartoComponent implements AfterViewInit {
    */
   initEvents() {
     /**
-     * When double click
+     * When click
      */
+    this.network.on('click', (params) => {
+      if (typeof params.nodes != undefined && params.nodes.length === 1){
+        const objectRawID = params.nodes[0];
+        const objectType = this.visidToType(objectRawID);
+        const objectID = this.visidToId(objectRawID);
+        //define selected type to show proper edit/detail menu
+        this.typeOfSelectedObject = objectType;
+        if(objectType === 'client'){
+          this.object = this.machines.find(m => m.id === objectID);
+        }else if(objectType === 'network'){
+          this.object = this.networks.find(n => n.id === objectID);
+        }
+      }
+      /**
+       * If double click on blank -> create a node
+       */
+    });
     this.network.on('doubleClick', (params) => {
       const nodesLen = params.nodes.length;
       const edgesLen = params.edges.length;
@@ -62,8 +84,8 @@ export class VisCartoComponent implements AfterViewInit {
     this.updateEdges(this.interfaceService.interfacesValue);
     this.updateNodes(this.networkService.networksValue, 'network');
 
-    this.machineService.machines.subscribe(machines => this.updateNodes(machines, 'client'));
-    this.networkService.networks.subscribe(networks => this.updateNodes(networks, 'network'));
+    this.machineService.machines.subscribe(machines => {this.updateNodes(machines, 'client'); this.machines = machines;});
+    this.networkService.networks.subscribe(networks => {this.updateNodes(networks, 'network'); this.networks = networks;});
     this.interfaceService.interfaces.subscribe(interfaces => this.updateEdges(interfaces));
   }
 
