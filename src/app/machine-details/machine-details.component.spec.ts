@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MachineDetailsComponent } from './machine-details.component';
 import { MachineService, AlertService, AccountService } from '@app/services';
-import { HttpClient } from '@angular/common/http';
 import { OmnisMachine } from '@app/models';
 
 describe('MachineDetailsComponent', () => {

@@ -10,11 +10,10 @@ import { MachineService } from '@app/services';
 
 export class InventaireComponent implements OnInit {
   machines: OmnisMachine[];
-  private selectedMachineId;
   constructor(private machinesService: MachineService) { }
 
   ngOnInit(): void {
-    this.machines = this.machinesService.machinesValue;
+    //Subscription to the machines object observable
     this.machinesService.machines.subscribe(machines => this.machines = machines);
   }
 }
