@@ -2,7 +2,7 @@ import { Component, ElementRef, AfterViewInit, ViewChild, Type } from '@angular/
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { OmnisInterface, OmnisMachine, OmnisNetwork } from '@app/models';
-import { MachineService, NetworkService, InterfaceService } from '@app/services';
+import { MachineService, NetworkService, InterfaceService, GatewayService } from '@app/services';
 // import { faLaptop, faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -24,6 +24,7 @@ export class VisCartoComponent implements AfterViewInit {
     private machineService: MachineService,
     private networkService: NetworkService,
     private interfaceService: InterfaceService,
+    private gatewayService: GatewayService
   ) { }
 
   ngAfterViewInit(): void {
@@ -84,6 +85,7 @@ export class VisCartoComponent implements AfterViewInit {
     this.updateEdges(this.interfaceService.interfacesValue);
     this.updateNodes(this.networkService.networksValue, 'network');
 
+    this.gatewayService.gateways.subscribe();
     this.machineService.machines.subscribe(machines => {this.updateNodes(machines, 'client'); this.machines = machines;});
     this.networkService.networks.subscribe(networks => {this.updateNodes(networks, 'network'); this.networks = networks;});
     this.interfaceService.interfaces.subscribe(interfaces => this.updateEdges(interfaces));
