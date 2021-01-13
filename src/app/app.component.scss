@@ -9,3 +9,11 @@
 .dropdown-item.active {
   background-color: #AAAAAA;
 }
+
+.box-alert {
+  left: 0;
+  right: 0;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+}
