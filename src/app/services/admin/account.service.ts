@@ -14,9 +14,12 @@ const jwtHelper = new JwtHelperService();
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-    public user: Observable<User>;
+    // current user
+    public user: Observable<User>; // subscribe to get current user
     private userSubject: BehaviorSubject<User>;
+    // current token
     private userToken: UserToken;
+    // current role
     private userRole: Role;
     private refreshTokenTimeout;
 
@@ -36,6 +39,10 @@ export class AccountService {
 
     public get roleValue(): Role {
         return this.userRole;
+    }
+
+    public get userTokenValue(): UserToken {
+        return this.userToken;
     }
 
     /// PERMISSIONS GETTER ///
@@ -110,13 +117,9 @@ export class AccountService {
     }
 
 
-    /// ///
+    /// User functions ///
 
-    public get userTokenValue(): UserToken {
-        return this.userToken;
-    }
-
-
+    // check if first connection
     firstConnection() {
         return this.http.get(`${environment.adminUrl}/first`, { responseType: 'text/plain' as 'json' })
             .pipe(map(res => {
@@ -133,6 +136,7 @@ export class AccountService {
             .pipe(map(userToken => { this.processUserToken(userToken); }));
     }
 
+    // refresh token and launch timer
     refreshToken() {
         return this.http.get<UserToken>(`${environment.adminUrl}/refresh`, { withCredentials: true })
             .pipe(map(userToken => { this.processUserToken(userToken); }));

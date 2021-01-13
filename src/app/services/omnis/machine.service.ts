@@ -19,7 +19,7 @@ export class MachineService {
   constructor(private http: HttpClient) {
     this.machinesSubject = new BehaviorSubject<OmnisMachine[]>(null);
     this.machines = this.machinesSubject.asObservable();
-    //when the class is first called, fetch all data from api
+    // when the class is first called, fetch all data from api
     this.getAll().subscribe();
   }
 
@@ -28,11 +28,11 @@ export class MachineService {
   }
 
   getAll() {
-    //get all obects from api
+    // get all obects from api
     return this.http.get<OmnisMachine[]>(`${environment.omnisApiUrl}/machines`)
       .pipe(tap((machines) => {
-        /*update behaviorSubject object everytime the getAll function is called,
-         this is what makes the real time update work*/
+        // update behaviorSubject object everytime the getAll function is called,
+        // this is what makes the real time update work
         this.machinesSubject.next(machines);
         return machines;
       })
@@ -44,46 +44,39 @@ export class MachineService {
   }
 
   update(machine: OmnisMachine) {
-    //update database entries using rest api
+    // update database entries using rest api
     return this.http.put<any>(`${environment.omnisApiUrl}/machine/${machine.id}`, machine, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const machines = this.machinesValue;
-        //find object to update
-        const machineToUpdate = machines.find(m => m.id === machine.id);
+
+        const machines = this.machinesValue; // get current local array state
+
+        const machineToUpdate = machines.find(m => m.id === machine.id); // find object to update
         const i = machines.indexOf(machineToUpdate);
-        //update the local array
-        machines.splice(machines.indexOf(machineToUpdate), 1, machine);
-        //update behaviorSubject object
-        this.machinesSubject.next(machines);
+
+        machines.splice(machines.indexOf(machineToUpdate), 1, machine); // update the local array
+
+        this.machinesSubject.next(machines); // update behaviorSubject object
       }));
   }
 
   insert(machine: OmnisMachine) {
-    //insert new entry in database using rest api
+    // insert new entry in database using rest api
     return this.http.post<any>(`${environment.omnisApiUrl}/machine`, machine, this.httpOptions)
       .pipe(tap(machine => {
-        //get current local array state
-        const machines = this.machinesValue;
-        //update the local array
-        machines.push(machine);
-        //update behaviorSubject object
-        this.machinesSubject.next(machines);
+        const machines = this.machinesValue; // get current local array state
+        machines.push(machine); // update the local array
+        this.machinesSubject.next(machines); // update behaviorSubject object
       }));
   }
 
   delete(id: string | number) {
-    //delete entry in database using rest api
+    // delete entry in database using rest api
     return this.http.delete<any>(`${environment.omnisApiUrl}/machine/${id}`, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const machines = this.machinesValue;
-        //find object to delete
-        const machineToDelete = machines.find(m => m.id === id);
-        //delete object
-        machines.splice(machines.indexOf(machineToDelete), 1);
-        //update behaviorSubject object
-        this.machinesSubject.next(machines);
+        const machines = this.machinesValue; // get current local array state
+        const machineToDelete = machines.find(m => m.id === id); // find object to delete
+        machines.splice(machines.indexOf(machineToDelete), 1); // delete object
+        this.machinesSubject.next(machines); // update behaviorSubject object
       }));
   }
 
