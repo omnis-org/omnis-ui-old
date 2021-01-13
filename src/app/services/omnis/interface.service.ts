@@ -19,7 +19,7 @@ export class InterfaceService {
   constructor(private http: HttpClient) {
     this.interfacesSubject = new BehaviorSubject<OmnisInterface[]>(null);
     this.interfaces = this.interfacesSubject.asObservable();
-    //when the class is first called, fetch all data from api
+    // when the class is first called, fetch all data from api
     this.getAll().subscribe();
   }
 
@@ -28,11 +28,11 @@ export class InterfaceService {
   }
 
   getAll() {
-    //get all obects from api
+    // get all obects from api
     return this.http.get<OmnisInterface[]>(`${environment.omnisApiUrl}/interfaces`)
       .pipe(tap((interfaces) => {
-        /*update behaviorSubject object everytime the getAll function is called,
-         this is what makes the real time update work*/
+        // update behaviorSubject object everytime the getAll function is called,
+        // this is what makes the real time update work
         this.interfacesSubject.next(interfaces);
         return interfaces;
       })
@@ -44,46 +44,35 @@ export class InterfaceService {
   }
 
   update(itf: OmnisInterface) {
-    //update database entries using rest api
+    // update database entries using rest api
     return this.http.put<any>(`${environment.omnisApiUrl}/interface/${itf.id}`, itf, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const interfaces = this.interfacesValue;
-        //find object to update
-        const interfaceToUpdate = interfaces.find(m => m.id === itf.id);
+        const interfaces = this.interfacesValue; // get current local array state
+        const interfaceToUpdate = interfaces.find(m => m.id === itf.id); // find object to update
         const i = interfaces.indexOf(interfaceToUpdate);
-        //update the local array
-        interfaces.splice(interfaces.indexOf(interfaceToUpdate), 1, itf);
-        //update behaviorSubject object
-        this.interfacesSubject.next(interfaces);
+        interfaces.splice(interfaces.indexOf(interfaceToUpdate), 1, itf); // update the local array
+        this.interfacesSubject.next(interfaces); // update behaviorSubject object
       }));
   }
 
   insert(itf: OmnisInterface) {
-    //insert new entry in database using rest api
+    // insert new entry in database using rest api
     return this.http.post<any>(`${environment.omnisApiUrl}/interface`, itf, this.httpOptions)
       .pipe(tap(itf => {
-        //get current local array state
-        const interfaces = this.interfacesValue;
-        //update the local array
-        interfaces.push(itf);
-        //update behaviorSubject object
-        this.interfacesSubject.next(interfaces);
+        const interfaces = this.interfacesValue; // get current local array state
+        interfaces.push(itf); // update the local array
+        this.interfacesSubject.next(interfaces); // update behaviorSubject object
       }));
   }
 
   delete(id: string | number) {
-    //delete entry in database using rest api
+    // delete entry in database using rest api
     return this.http.delete<any>(`${environment.omnisApiUrl}/interface/${id}`, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const interfaces = this.interfacesValue;
-        //find object to delete
-        const interfaceToDelete = interfaces.find(m => m.id === id);
-        //delete object
-        interfaces.splice(interfaces.indexOf(interfaceToDelete), 1);
-        //update behaviorSubject object
-        this.interfacesSubject.next(interfaces);
+        const interfaces = this.interfacesValue; // get current local array state
+        const interfaceToDelete = interfaces.find(m => m.id === id); // find object to delete
+        interfaces.splice(interfaces.indexOf(interfaceToDelete), 1); // delete object
+        this.interfacesSubject.next(interfaces); // update behaviorSubject object
       }));
   }
 }

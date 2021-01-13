@@ -18,7 +18,7 @@ export class NetworkService {
   constructor(private http: HttpClient) {
     this.networksSubject = new BehaviorSubject<OmnisNetwork[]>(null);
     this.networks = this.networksSubject.asObservable();
-    //when the class is first called, fetch all data from api
+    // when the class is first called, fetch all data from api
     this.getAll().subscribe();
   }
 
@@ -27,11 +27,11 @@ export class NetworkService {
   }
 
   getAll() {
-    //get all obects from api
+    // get all obects from api
     return this.http.get<OmnisNetwork[]>(`${environment.omnisApiUrl}/networks`)
       .pipe(tap((networks) => {
-        /*update behaviorSubject object everytime the getAll function is called,
-         this is what makes the real time update work*/
+        // update behaviorSubject object everytime the getAll function is called,
+        // this is what makes the real time update work
         this.networksSubject.next(networks);
         return networks;
       })
@@ -43,18 +43,14 @@ export class NetworkService {
   }
 
   update(network: OmnisNetwork) {
-    //update database entries using rest api
+    // update database entries using rest api
     return this.http.put<any>(`${environment.omnisApiUrl}/network/${network.id}`, network, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const networks = this.networksValue;
-        //find object to update
-        const networkToUpdate = networks.find(m => m.id === network.id);
+        const networks = this.networksValue; // get current local array state
+        const networkToUpdate = networks.find(m => m.id === network.id); // find object to update
         const i = networks.indexOf(networkToUpdate);
-        //update the local array
-        networks.splice(networks.indexOf(networkToUpdate), 1, network);
-        //update behaviorSubject object
-        this.networksSubject.next(networks);
+        networks.splice(networks.indexOf(networkToUpdate), 1, network); // update the local array
+        this.networksSubject.next(networks); // update behaviorSubject object
       }));
   }
 
@@ -62,12 +58,9 @@ export class NetworkService {
     //insert new entry in database using rest api
     return this.http.post<any>(`${environment.omnisApiUrl}/network`, network, this.httpOptions)
       .pipe(tap(network => {
-        //get current local array state
-        const networks = this.networksValue;
-        //update the local array
-        networks.push(network);
-        //update behaviorSubject object
-        this.networksSubject.next(networks);
+        const networks = this.networksValue; // get current local array state
+        networks.push(network); // update the local array
+        this.networksSubject.next(networks); // update behaviorSubject object
       }));
   }
 
@@ -75,14 +68,10 @@ export class NetworkService {
     //delete entry in database using rest api
     return this.http.delete<any>(`${environment.omnisApiUrl}/network/${id}`, this.httpOptions)
       .pipe(tap(_ => {
-        //get current local array state
-        const networks = this.networksValue;
-        //find object to delete
-        const networkToDelete = networks.find(m => m.id === id);
-        //delete object
-        networks.splice(networks.indexOf(networkToDelete), 1);
-        //update behaviorSubject object
-        this.networksSubject.next(networks);
+        const networks = this.networksValue; // get current local array state
+        const networkToDelete = networks.find(m => m.id === id); // find object to delete
+        networks.splice(networks.indexOf(networkToDelete), 1); // delete object
+        this.networksSubject.next(networks); // update behaviorSubject object
       }));
   }
 }
