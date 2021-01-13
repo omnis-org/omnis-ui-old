@@ -12,8 +12,7 @@ export class InterfaceService {
   private interfacesSubject: BehaviorSubject<OmnisInterface[]>;
 
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    responseType: 'text/plain' as 'json'
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) {
@@ -45,7 +44,7 @@ export class InterfaceService {
 
   update(itf: OmnisInterface) {
     // update database entries using rest api
-    return this.http.put<any>(`${environment.omnisApiUrl}/interface/${itf.id}`, itf, this.httpOptions)
+    return this.http.patch(`${environment.omnisApiUrl}/interface/${itf.id}`, itf)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue; // get current local array state
         const interfaceToUpdate = interfaces.find(m => m.id === itf.id); // find object to update
@@ -57,7 +56,7 @@ export class InterfaceService {
 
   insert(itf: OmnisInterface) {
     // insert new entry in database using rest api
-    return this.http.post<any>(`${environment.omnisApiUrl}/interface`, itf, this.httpOptions)
+    return this.http.post<OmnisInterface>(`${environment.omnisApiUrl}/interface`, itf)
       .pipe(tap(itf => {
         const interfaces = this.interfacesValue; // get current local array state
         interfaces.push(itf); // update the local array
@@ -67,7 +66,7 @@ export class InterfaceService {
 
   delete(id: string | number) {
     // delete entry in database using rest api
-    return this.http.delete<any>(`${environment.omnisApiUrl}/interface/${id}`, this.httpOptions)
+    return this.http.delete(`${environment.omnisApiUrl}/interface/${id}`)
       .pipe(tap(_ => {
         const interfaces = this.interfacesValue; // get current local array state
         const interfaceToDelete = interfaces.find(m => m.id === id); // find object to delete

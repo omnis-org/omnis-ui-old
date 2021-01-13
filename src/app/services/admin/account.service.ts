@@ -121,13 +121,8 @@ export class AccountService {
 
     // check if first connection
     firstConnection() {
-        return this.http.get(`${environment.adminUrl}/first`, { responseType: 'text/plain' as 'json' })
-            .pipe(map(res => {
-                if (res === 'TRUE') {
-                    return true;
-                }
-                return false;
-            }));
+        return this.http.get<any>(`${environment.adminUrl}/first`)
+            .pipe(map(res => res.result ? true : false));
     }
 
     login(username, password) {
@@ -178,7 +173,7 @@ export class AccountService {
             user.roleId = parseInt(user.roleId, 10);
         }
 
-        return this.http.put(`${environment.adminUrl}/update/${id}`, user)
+        return this.http.patch(`${environment.adminUrl}/update/${id}`, user)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id === this.userValue.id) {
@@ -194,7 +189,7 @@ export class AccountService {
     }
 
     delete(id: string) {
-        return this.http.delete<any>(`${environment.adminApiUrl}/user/${id}`, { responseType: 'text/plain' as 'json' })
+        return this.http.delete(`${environment.adminApiUrl}/user/${id}`)
             .pipe(tap(_ => {
                 // auto logout if the logged in user deleted their own record
                 if (id === this.userValue.id) {

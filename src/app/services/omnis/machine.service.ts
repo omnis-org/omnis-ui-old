@@ -12,8 +12,7 @@ export class MachineService {
   private machinesSubject: BehaviorSubject<OmnisMachine[]>;
 
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    responseType: 'text/plain' as 'json'
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) {
@@ -45,23 +44,19 @@ export class MachineService {
 
   update(machine: OmnisMachine) {
     // update database entries using rest api
-    return this.http.put<any>(`${environment.omnisApiUrl}/machine/${machine.id}`, machine, this.httpOptions)
+    return this.http.patch(`${environment.omnisApiUrl}/machine/${machine.id}`, machine, this.httpOptions)
       .pipe(tap(_ => {
-
         const machines = this.machinesValue; // get current local array state
-
         const machineToUpdate = machines.find(m => m.id === machine.id); // find object to update
         const i = machines.indexOf(machineToUpdate);
-
         machines.splice(machines.indexOf(machineToUpdate), 1, machine); // update the local array
-
         this.machinesSubject.next(machines); // update behaviorSubject object
       }));
   }
 
   insert(machine: OmnisMachine) {
     // insert new entry in database using rest api
-    return this.http.post<any>(`${environment.omnisApiUrl}/machine`, machine, this.httpOptions)
+    return this.http.post<OmnisMachine>(`${environment.omnisApiUrl}/machine`, machine, this.httpOptions)
       .pipe(tap(machine => {
         const machines = this.machinesValue; // get current local array state
         machines.push(machine); // update the local array
@@ -71,7 +66,7 @@ export class MachineService {
 
   delete(id: string | number) {
     // delete entry in database using rest api
-    return this.http.delete<any>(`${environment.omnisApiUrl}/machine/${id}`, this.httpOptions)
+    return this.http.delete(`${environment.omnisApiUrl}/machine/${id}`)
       .pipe(tap(_ => {
         const machines = this.machinesValue; // get current local array state
         const machineToDelete = machines.find(m => m.id === id); // find object to delete
@@ -88,11 +83,11 @@ export class MachineService {
   }
 
   authorize(id: string | number) {
-    return this.http.put<any>(`${environment.adminUrl}/pending_machine/${id}/authorize`, null, this.httpOptions);
+    return this.http.patch<any>(`${environment.adminUrl}/pending_machine/${id}/authorize`, null, this.httpOptions);
   }
 
   unauthorize(id: string | number) {
-    return this.http.put<any>(`${environment.adminUrl}/pending_machine/${id}/unauthorize`, null, this.httpOptions);
+    return this.http.patch<any>(`${environment.adminUrl}/pending_machine/${id}/unauthorize`, null, this.httpOptions);
   }
 
 }
