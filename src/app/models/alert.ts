@@ -9,6 +9,7 @@ export class Alert {
 
     constructor(init?: Partial<Alert>) {
         Object.assign(this, init);
+        this.autoClose = true;
     }
 }
 
