@@ -11,14 +11,14 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.0.5",
-    "@angular/common": "~11.0.5",
-    "@angular/compiler": "~11.0.5",
-    "@angular/core": "~11.0.5",
-    "@angular/forms": "~11.0.5",
-    "@angular/platform-browser": "~11.0.5",
-    "@angular/platform-browser-dynamic": "~11.0.5",
-    "@angular/router": "~11.0.5",
+    "@angular/animations": "~11.0.8",
+    "@angular/common": "~11.0.8",
+    "@angular/compiler": "~11.0.8",
+    "@angular/core": "~11.0.8",
+    "@angular/forms": "~11.0.8",
+    "@angular/platform-browser": "~11.0.8",
+    "@angular/platform-browser-dynamic": "~11.0.8",
+    "@angular/router": "~11.0.8",
     "@fortawesome/angular-fontawesome": "^0.8.1",
     "@auth0/angular-jwt": "^5.0.2",
     "@fortawesome/fontawesome-free": "^5.15.1",
@@ -61,7 +61,7 @@
     "ts-node": "~9.1.1",
     "typescript": "~4.0.2",
     "uuid": "^8.3.2",
-    "vis-data": "^7.1.1",
+    "vis-data": "^7.1.2",
     "vis-util": "^4.3.4"
   }
 }
