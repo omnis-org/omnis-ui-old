@@ -11,8 +11,7 @@ export class NetworkService {
   public networks: Observable<OmnisNetwork[]>;
   private networksSubject: BehaviorSubject<OmnisNetwork[]>;
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    responseType: 'text/plain' as 'json'
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) {
@@ -44,7 +43,7 @@ export class NetworkService {
 
   update(network: OmnisNetwork) {
     // update database entries using rest api
-    return this.http.put<any>(`${environment.omnisApiUrl}/network/${network.id}`, network, this.httpOptions)
+    return this.http.patch(`${environment.omnisApiUrl}/network/${network.id}`, network, this.httpOptions)
       .pipe(tap(_ => {
         const networks = this.networksValue; // get current local array state
         const networkToUpdate = networks.find(m => m.id === network.id); // find object to update
@@ -56,7 +55,7 @@ export class NetworkService {
 
   insert(network: OmnisNetwork) {
     //insert new entry in database using rest api
-    return this.http.post<any>(`${environment.omnisApiUrl}/network`, network, this.httpOptions)
+    return this.http.post<OmnisNetwork>(`${environment.omnisApiUrl}/network`, network, this.httpOptions)
       .pipe(tap(network => {
         const networks = this.networksValue; // get current local array state
         networks.push(network); // update the local array
@@ -66,7 +65,7 @@ export class NetworkService {
 
   delete(id: string | number) {
     //delete entry in database using rest api
-    return this.http.delete<any>(`${environment.omnisApiUrl}/network/${id}`, this.httpOptions)
+    return this.http.delete(`${environment.omnisApiUrl}/network/${id}`)
       .pipe(tap(_ => {
         const networks = this.networksValue; // get current local array state
         const networkToDelete = networks.find(m => m.id === id); // find object to delete
