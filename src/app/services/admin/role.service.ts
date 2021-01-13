@@ -12,8 +12,7 @@ export class RoleService {
   private rolesSubject: BehaviorSubject<Role[]>;
 
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    responseType: 'text/plain' as 'json'
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) { }
@@ -31,14 +30,14 @@ export class RoleService {
   }
 
   update(role: Role) {
-    return this.http.put<any>(`${environment.adminApiUrl}/role/${role.id}`, role, this.httpOptions);
+    return this.http.patch(`${environment.adminApiUrl}/role/${role.id}`, role, this.httpOptions);
   }
 
   insert(role: Role) {
-    return this.http.post<any>(`${environment.adminApiUrl}/role`, role, this.httpOptions);
+    return this.http.post(`${environment.adminApiUrl}/role`, role, this.httpOptions);
   }
 
   delete(id: string | number) {
-    return this.http.delete<any>(`${environment.adminApiUrl}/role/${id}`, this.httpOptions);
+    return this.http.delete(`${environment.adminApiUrl}/role/${id}`);
   }
 }
