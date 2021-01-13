@@ -10,6 +10,7 @@ import { environment } from '@environments/environment';
 export class InterfaceService {
   public interfaces: Observable<OmnisInterface[]>;
   private interfacesSubject: BehaviorSubject<OmnisInterface[]>;
+  private refreshTimeout;
 
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,6 +33,7 @@ export class InterfaceService {
       .pipe(tap((interfaces) => {
         // update behaviorSubject object everytime the getAll function is called,
         // this is what makes the real time update work
+        this.refreshTimer();
         this.interfacesSubject.next(interfaces);
         return interfaces;
       })
@@ -73,5 +75,9 @@ export class InterfaceService {
         interfaces.splice(interfaces.indexOf(interfaceToDelete), 1); // delete object
         this.interfacesSubject.next(interfaces); // update behaviorSubject object
       }));
+  }
+
+  private refreshTimer() {
+    this.refreshTimeout = setTimeout(() => this.getAll().subscribe(), environment.refreshDataTimeout);
   }
 }
