@@ -10,6 +10,7 @@ import { environment } from '@environments/environment';
 export class MachineService {
   public machines: Observable<OmnisMachine[]>;
   private machinesSubject: BehaviorSubject<OmnisMachine[]>;
+  private refreshTimeout;
 
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,6 +33,7 @@ export class MachineService {
       .pipe(tap((machines) => {
         // update behaviorSubject object everytime the getAll function is called,
         // this is what makes the real time update work
+        this.refreshTimer();
         this.machinesSubject.next(machines);
         return machines;
       })
@@ -89,5 +91,10 @@ export class MachineService {
   unauthorize(id: string | number) {
     return this.http.patch<any>(`${environment.adminUrl}/pending_machine/${id}/unauthorize`, null, this.httpOptions);
   }
+
+  private refreshTimer() {
+    this.refreshTimeout = setTimeout(() => this.getAll().subscribe(), environment.refreshDataTimeout);
+  }
+
 
 }

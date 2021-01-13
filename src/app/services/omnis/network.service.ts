@@ -10,6 +10,7 @@ import { environment } from '@environments/environment';
 export class NetworkService {
   public networks: Observable<OmnisNetwork[]>;
   private networksSubject: BehaviorSubject<OmnisNetwork[]>;
+  private refreshTimeout;
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -31,6 +32,7 @@ export class NetworkService {
       .pipe(tap((networks) => {
         // update behaviorSubject object everytime the getAll function is called,
         // this is what makes the real time update work
+        this.refreshTimeout();
         this.networksSubject.next(networks);
         return networks;
       })
@@ -72,5 +74,9 @@ export class NetworkService {
         networks.splice(networks.indexOf(networkToDelete), 1); // delete object
         this.networksSubject.next(networks); // update behaviorSubject object
       }));
+  }
+
+  private refreshTimer() {
+    this.refreshTimeout = setTimeout(() => this.getAll().subscribe(), environment.refreshDataTimeout);
   }
 }
